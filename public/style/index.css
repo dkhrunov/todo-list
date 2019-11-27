@@ -4,6 +4,8 @@ body {
 	margin: 0;
 	padding: 0;
 	font-family: 'Roboto', sans-serif;
+	background: #202020;
+	color: white;
 }
 
 #root {
@@ -44,17 +46,33 @@ body {
 
 
 .todo-list {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	width: 100%;
 	margin-left: 0;
-   padding-left: 0;
+	padding-left: 0;
 }
 
 .todo-list li {
 	display: flex;
-	width: 200px;
 	justify-content: space-between;
+	align-items: center;
+	width: 50%;
+	height: 50px;
+	margin-bottom: 10px;
+	padding: 0 20px 0 20px;
+	border: 2px solid #27263d;
+	border-radius: 50px;
 	list-style-type: none;
+	background: #8b7aa8;
+	color: #27263d;
+	font-weight: bold;
 }
 
 .todo-list li span {
 	cursor: pointer;
 }
+
+/* Стили для checkbox */

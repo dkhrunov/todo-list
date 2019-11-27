@@ -1,4 +1,5 @@
 import Component from './Component.js';
+import TodoItemComponent from './TodoItemComponent.js';
 
 export default class TodoListComponent extends Component {
 	constructor(anchor, props) {
@@ -20,14 +21,17 @@ export default class TodoListComponent extends Component {
 	render() {
 		super.render();
 
-		return `
-			<ul class="todo-list">
-				${
-					this.props.items.map((item, i) => `
-						<li>${item} <span id='${i}'>X</span></li>
-					`).join('')
-				}
-			</ul>
-		`;
+		let list = document.createElement('ul');
+		list.classList.add('todo-list');
+
+		this.props.items.map((item, i) => {
+			const todoItemComponent = new TodoItemComponent(document.createElement('li'), { item: { text: item.text, id: i } });
+			list.innerHTML +=	todoItemComponent.render();
+		})
+
+		this.clearAnchor();
+		this.addChild(list);
+		
+		return this.HtmlAsString();
 	}
 }

@@ -7,6 +7,7 @@ export default class FooterComponent extends Component {
 
 	render() {
 		super.render();
+		
 		return `
 				<hr>
 				${this.props.text}

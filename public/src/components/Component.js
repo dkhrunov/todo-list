@@ -66,4 +66,30 @@ export default class Component {
 	addChilds(elements) {
 		elements.map(element => this.anchor.appendChild(element));
 	}
+
+	/**
+	 * Возвращает строку разметки
+	 * @returns {String}
+	 */
+	HtmlAsString() {
+		return this.anchor.innerHTML;
+	}
+
+	/**
+	 * Возвращает корневой елемент как строку разметки
+	 * @returns {String}
+	 */
+	anchorAsString() {
+		const div = document.createElement('div');
+		this.setSelfTo(div);
+
+		return div.innerHTML;
+	}
+
+	/**
+	 * Очищает корневой елемент
+	 */
+	clearAnchor() {
+		this.anchor.innerHTML = '';
+	}
 }
