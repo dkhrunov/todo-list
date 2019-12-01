@@ -4,75 +4,90 @@ body {
 	margin: 0;
 	padding: 0;
 	font-family: 'Roboto', sans-serif;
-	background: #202020;
-	color: white;
+	background: white;
+	color: #202020;
+	overflow-x: hidden;
+	overflow-y: hidden;
 }
 
 #root {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
 	width: 100vw;
 	height: 100vh;
 }
 
 .header {
 	display: flex;
+	flex-direction: column;
 	justify-content: center;
-	align-items: center;
-	height: 10%;
+	height: 7%;
 	width: 100%;
-	font-size: 2.5em;
+	font-size: 2em;
+	box-shadow: 0px 6px 20px #27272780;
+	background: #af7eeb;
+	color: white;
+	z-index: 999;
+}
+
+.header .app-name{
+	margin-left: 10px;
+	width: fit-content;
 }
 
 .content {
 	display: flex;
 	justify-content: center;
 	align-items: center;
+	height: 93%;
+	width: 100%;
+	overflow-y: hidden;
+	overflow-x: hidden;
+	background: #e3e9ff;
+}
+
+#todo-list {
+	width: 60%;
 	height: 80%;
-	width: 100%;
+	padding: 20px;
+	overflow-x: hidden;
+	overflow-y: auto;
+	background: white;
+	border-radius: 10px;
 }
 
-.footer {
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	flex-direction: column;
-	height: 10%;
-	width: 100%;
-	font-size: 0.8em;
-}
-
-.footer hr {
-	 width: 99%;
-}
-
-
-.todo-list {
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
-	align-items: center;
-	width: 100%;
-	margin-left: 0;
-	padding-left: 0;
-}
-
-.todo-list li {
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
+/* Custom elements style */
+todo-list {
 	width: 50%;
-	height: 50px;
-	margin-bottom: 10px;
-	padding: 0 20px 0 20px;
-	border: 2px solid #27263d;
-	border-radius: 50px;
-	list-style-type: none;
-	background: #8b7aa8;
-	color: #27263d;
-	font-weight: bold;
-}
-
-.todo-list li span {
-	cursor: pointer;
+	height: 100%;
 }
 
 /* Стили для checkbox */
+
+/* END */
+
+/* Стили для scrollbar */
+::-webkit-scrollbar {
+	width: 10px;
+ }
+ 
+ /* Track */
+ ::-webkit-scrollbar-track {
+	background: #f1f1f1;
+	border-radius: 20px;
+ }
+  
+ /* Handle */
+ ::-webkit-scrollbar-thumb {
+	background: rgb(190, 190, 190);
+	border-radius: 20px;
+ }
+ 
+ /* Handle on hover */
+ ::-webkit-scrollbar-thumb:hover {
+	background: #888; 
+ }
+
+ /* END */
