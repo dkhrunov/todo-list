@@ -1,95 +1,55 @@
-// const template = document.createElement('template');
-// template.innerHTML = `
-// 	<style>
-// 	</style>
-
-// 	<form>
-// 		<div class="inputBox">
-// 			<label class="labelText">Login:</label>
-// 			<input class="input" type="email">
-// 		</div>
-// 		<div class="inputBox">
-// 			<label class="labelText">Password:</label>
-// 			<input class="input" type="password">
-// 		</div>
-// 		<button type="submit">Login</button>
-// 	</form>
-// `;
-
-// export default class LoginPageComponent extends HTMLElement {
-
-// 	_template;
-// 	_submitBtn;
-
-// 	constructor() {
-// 		super();
-// 		this.attachShadow({mode: "open"});
-// 		this._template = template.content.cloneNode(true);
-// 		this._submitBtn = this.template.querySelector('button[type=submit]');
-// 	}
-
-// 	/**
-// 	 * @returns {HTMLTemplateElement}
-// 	 */
-// 	get template() { return this._template; }
-
-// 	/**
-// 	 * @returns {HTMLElement}
-// 	 */
-// 	get submitBtn() { return this._submitBtn; }
-
-// 	connectedCallback(){
-// 		this.render();
-// 		this.subscribeEvents();
-// 	}
-
-// 	disconnectedCallback() {
-// 		this.unSubscribeEvents();
-// 	}
-
-// 	/**
-// 	 * Удаляет задание из общего списка
-// 	 */
-// 	onRemoveItem() {
-// 		this.remove();
-// 	}
-
-// 	/**
-// 	 * Оформление подписок событий элемента
-// 	 */
-// 	subscribeEvents() {
-// 		this.submitBtn.addEventListener('click', (event) => this.onSubmitForm(event));
-// 	}
-
-// 	/**
-// 	 * Отписка от всех событий
-// 	 */
-// 	unSubscribeEvents() {
-// 		this.submitBtn.addEventListener('click', (event) => this.onSubmitForm(event));
-// 	}
-
-// 	/**
-// 	 * Подтверждение ввода данных для входа
-// 	 * @param {HTMLEventElement} event 
-// 	 */
-// 	onSubmitForm(event) {
-// 		// Если успешно залогинился то перенаправляем
-// 		window.dispatchEvent(new CustomEvent('changeRoute', { detail: { route: 'todolist' } }));
-// 		event.preventDefault();
-// 	}
-
-// 	/**
-// 	 * Отрисовка элемента
-// 	 */
-// 	render() {
-// 		this.shadowRoot.appendChild(this.template);
-// 	}
-// }
-
-// TODO разбить логику render
 export default class LoginPageComponent {
+
+	_inputLogin;
+	_inputPassword;
+	_submitBtn;
+
 	constructor() {
 		this.fragment = document.createDocumentFragment();
+		this._inputLogin = document.createElement('input');
+		this._inputPassword = document.createElement('input');
+		this._submitBtn = document.createElement('button');
+	}
+
+	/**
+	 * @returns {HTMLTemplateElement}
+	 */
+	get inputLogin() { return this._inputLogin; }
+
+	/**
+	 * @returns {HTMLTemplateElement}
+	 */
+	get inputPassword() { return this._inputPassword; }
+
+	/**
+	 * @returns {HTMLTemplateElement}
+	 */
+	get submitBtn() { return this._submitBtn; }
+
+	/**
+	 * Авторизация и перенаправление после успешной авторизации
+	 * @param {HTMLEventElement} event 
+	 */
+	onSubmit(event) {
+		// TODO добавить авторизацию
+		//if (this.inputLogin.value == 'admin' && this.inputPassword.value == 'admin') { 
+			window.dispatchEvent(new CustomEvent('changeRoute', { detail: { route: 'todolist' } }));
+		//}
+		event.preventDefault();
+	}
+
+	/**
+	 * Оформление подписок событий элемента
+	 */
+	subscribeEvents() {
+		this.submitBtn.addEventListener('click', (event) => this.onSubmit(event));
+	}
+
+	/**
+	 * Отписка от всех событий
+	 */
+	unSubscribeEvents() {
+		this.submitBtn.removeEventListener('click', (event) => this.onSubmit(event));
 	}
 
 	/**
@@ -112,30 +72,25 @@ export default class LoginPageComponent {
 		loginBoxElement.classList.add('inputBox');
 		formElement.appendChild(loginBoxElement);
 
-		const inputLoginElement = document.createElement('input');
-		inputLoginElement.classList.add('input');
-		inputLoginElement.setAttribute('type', 'text');
-		inputLoginElement.setAttribute('placeholder', 'Login');
-		loginBoxElement.appendChild(inputLoginElement);
+		this.inputLogin.classList.add('input');
+		this.inputLogin.setAttribute('type', 'text');
+		this.inputLogin.setAttribute('placeholder', 'Login');
+		loginBoxElement.appendChild(this.inputLogin);
 		
 		const passwordBoxElement = document.createElement('div');
 		passwordBoxElement.classList.add('inputBox');
 		formElement.appendChild(passwordBoxElement);
 
-		const inputPasswordElement = document.createElement('input');
-		inputPasswordElement.classList.add('input');
-		inputPasswordElement.setAttribute('type', 'password');
-		inputPasswordElement.setAttribute('placeholder', 'Password');
-		passwordBoxElement.appendChild(inputPasswordElement);
+		this.inputPassword.classList.add('input');
+		this.inputPassword.setAttribute('type', 'password');
+		this.inputPassword.setAttribute('placeholder', 'Password');
+		passwordBoxElement.appendChild(this.inputPassword);
 
-		const submitBtn = document.createElement('button');
-		submitBtn.innerText = 'Sign in';
-		submitBtn.setAttribute('type', 'submit');
-		formElement.appendChild(submitBtn);
-		submitBtn.addEventListener('click', (event) => {
-			window.dispatchEvent(new CustomEvent('changeRoute', { detail: { route: 'todolist' } }));
-	 		event.preventDefault();
-		});
+		this.submitBtn.innerText = 'Sign in';
+		this.submitBtn.setAttribute('type', 'submit');
+		formElement.appendChild(this.submitBtn);
+		
+		this.subscribeEvents();
 
 		return this.fragment;
 	}

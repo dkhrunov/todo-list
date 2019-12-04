@@ -1,4 +1,5 @@
 import TodoItemComponent from './TodoItemComponent.js';
+import { generateRandomNum, formatDate } from '../Utilities/utilities.js';
 
 customElements.define('todo-item', TodoItemComponent);
 
@@ -20,8 +21,6 @@ template.innerHTML = `
 	</ul>
 `;
 
-const generateId = () => String(Math.round(Date.now() * Math.random()));
-
 export default class TodoListComponent extends HTMLElement {
 
 	_template;
@@ -29,85 +28,25 @@ export default class TodoListComponent extends HTMLElement {
 	constructor() {
 		super();
 		this.attachShadow({mode: "open"});
-		this._template = template.content.cloneNode(true);
+		
 		this.list = [
 			{
-				id: generateId(),
+				id: generateRandomNum(),
 				text: 'Повседневная практика показывает, что начало повседневной работы.',
-				date: '03.12.2019',
+				date: '03.12.19',
 				status: 'waiting'
 			},
 			{
-				id: generateId(),
+				id: generateRandomNum(),
 				text: 'Повседневная практика показывает, что социально-экономическое развитие.',
-				date: '20.11.2019',
+				date: '20.11.19',
 				status: 'waiting'
 			},
 			{
-				id: generateId(),
+				id: generateRandomNum(),
 				text: 'Сделать тесты по всем предметам.',
-				date: '01.10.2019',
+				date: '01.10.19',
 				status: 'done'
-			},
-			{
-				id: generateId(),
-				text: 'Таким образом, социально-экономическое развитие способствует подготовке.',
-				date: '31.08.2019',
-				status: 'waiting'
-			},
-			{
-				id: generateId(),
-				text: 'Не следует, однако, забывать о том, что реализация намеченного плана.',
-				date: '02.12.2019',
-				status: 'waiting'
-			},
-			{
-				id: generateId(),
-				text: 'Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet.',
-				date: '20.11.2019',
-				status: 'waiting'
-			},
-			{
-				id: generateId(),
-				text: 'Excepteur sint occaecat cupidatat non proident, consectetur adipiscing elit?',
-				date: '01.10.2019',
-				status: 'done'
-			},
-			{
-				id: generateId(),
-				text: 'Не следует, однако, забывать о том, что реализация намеченного плана.',
-				date: '31.08.2019',
-				status: 'done'
-			},
-			{
-				id: generateId(),
-				text: 'Повседневная практика показывает, что социально-экономическое развитие играет важную роль.',
-				date: '01.12.2019',
-				status: 'done'
-			},
-			{
-				id: generateId(),
-				text: 'Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet.',
-				date: '20.11.2019',
-				status: 'waiting'
-			},
-			{
-				id: generateId(),
-				text: 'Sed ut perspiciatis, qui in ea voluptate velit esse, quam nihil molestiae consequatur.',
-				date: '01.10.2019',
-				status: 'waiting'
-			},
-			{
-				id: generateId(),
-				text: 'Excepteur sint occaecat cupidatat non proident, unde omnis iste natus error sit voluptatem.',
-				date: '31.08.2019',
-				status: 'waiting'
-			},
-			{
-				id: generateId(),
-				text: 'Повседневная практика показывает, что социально-экономическое развитие.',
-				date: '01.12.2019',
-				status: 'waiting'
 			},
 		];
 	}
@@ -119,19 +58,108 @@ export default class TodoListComponent extends HTMLElement {
 
 	connectedCallback() {
 		this.render();
+		this.subscribeEvents();
 	}
 
 	disconnectedCallback() {
+		this.unSubscribeEvents();
+	}
 
+	/**
+	 * Обновляет список и рендерит новый список дел
+	 * @param {HTMLEventElement} event 
+	 */
+	onCreateTodo(event) {
+		this.addTodoToList(event.detail);
+		this.render();
+	}
+
+	/**
+	 * Удаляет элемент из списка дел и рендерит новый список дел
+	 * @param {HTMLEventElement} event 
+	 */
+	onDeleteTodo(event) {
+		this.deleteTodoFromList(event.detail.id);
+		//this.render();
+	}
+
+	/**
+	 * Редактирует задачу в списке дел 
+	 * @param {HTMLEventElement} event 
+	 */
+	onEditTodo(event) {
+		this.editTodoInList(event.detail);
+	}
+
+
+	/**
+	 * Оформление подписок событий элемента
+	 */
+	subscribeEvents() {
+		window.addEventListener('createTodo', (event) => this.onCreateTodo(event));
+		window.addEventListener('deleteTodo', (event) => this.onDeleteTodo(event));
+		window.addEventListener('editTodo', (event) => this.onEditTodo(event));
+	}
+
+	/**
+	 * Отписка от всех событий
+	 */
+	unSubscribeEvents() {
+		window.removeEventListener('createTodo', (event) => this.onCreateTodo(event));
+		window.removeEventListener('deleteTodo', (event) => this.onDeleteTodo(event));
+		window.removeEventListener('editTodo', (event) => this.onEditTodo(event));
+	}
+
+	/**
+	 * Вовзращает найденный по id объект списка дел
+	 * @param {String} id 
+	 * @returns {Object}
+	 */
+	findTodoInList(id) {
+		return this.list.filter(item => item.id === id)[0];
+	}
+
+	/**
+	 * Добваляет новое задание в список
+	 * @param {Object} data
+	 */
+	addTodoToList(data) {
+		this.list.push({
+			id: generateRandomNum(),
+			text: data.text,
+			date: formatDate(data.date),
+			status: data.status
+		})
+	}
+
+	/**
+	 * Удаляет из списка дел элемент по id
+	 * @param {String} id
+	 */
+	deleteTodoFromList(id) {
+		this.list = this.list.filter(item => item.id !== id);
+	}
+
+	/**
+	 * Заменяет значения задачи на новые в списке дел
+	 * @param {Object} data
+	 */
+	editTodoInList(data) {
+		let todo = this.findTodoInList(data.id);
+		// заменяет в первом аргументе одинаковые поля со вторым аргументом, на значения второго аргумента
+		Object.assign(todo, data);
 	}
 
 	/**
 	 * Отрисовка элемента
 	 */
 	render() {
+		this._template = template.content.cloneNode(true);
+		
 		this.shadowRoot.innerHTML = '';
 
 		const fragment = document.createDocumentFragment();
+		
 
 		this.list.map( ({ id, text, date, status }) => {
 			const todoItem = document.createElement('todo-item');
@@ -144,5 +172,7 @@ export default class TodoListComponent extends HTMLElement {
 
 		this.template.querySelector('ul').appendChild(fragment);
 		this.shadowRoot.appendChild(this.template);
+
+		setInterval(() => console.log(this.list), 5000);
 	}
 }

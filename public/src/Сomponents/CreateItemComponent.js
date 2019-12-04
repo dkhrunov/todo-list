@@ -71,9 +71,6 @@ export default class CreateItemComponent extends HTMLElement {
 	constructor() {
 		super();
 		this.attachShadow({mode: "open"});
-		this._template = template.content.cloneNode(true);
-		this._newItemText = this.template.querySelector(".item-text input[type=text]");
-		this._addItemBtn = this.template.querySelector('.add-item-btn button');
 	}
 
 	/**
@@ -105,13 +102,15 @@ export default class CreateItemComponent extends HTMLElement {
 	 * @param {HTMLEventElement} event 
 	 */
 	onSubmit(event) {
-		// Press Enter key!
-		if (event.key === 'Enter') {
-			console.log('handlerSubmit PRESS ENTER: ', this.newItemText.value);
-		}
-		// Press plus button
-		if (event.target.tagName === "BUTTON") {
-			console.log('handlerSubmit PRESS BUTTON: ' + this.newItemText.value);
+		// Press Enter key or Press plus button
+		if (event.key === 'Enter' || event.target.tagName === "BUTTON") {
+			window.dispatchEvent(new CustomEvent('createTodo', { 
+				detail: {
+					text: this.newItemText.value,
+					date: new Date(),
+					status: 'waiting'
+				} 
+			}));
 		}
 	}
 
@@ -121,7 +120,6 @@ export default class CreateItemComponent extends HTMLElement {
 	 */
 	onChange(event) {
 		this.newItemText.value = event.target.value;
-		console.log('onChange: ', this.newItemText.value);
 	}
 
 	/**
@@ -146,6 +144,11 @@ export default class CreateItemComponent extends HTMLElement {
 	 * Отрисовка элемента
 	 */
 	render() {
+		this._template = template.content.cloneNode(true);
+		
+		this._newItemText = this.template.querySelector(".item-text input[type=text]");
+		this._addItemBtn = this.template.querySelector('.add-item-btn button');
+		
 		this.shadowRoot.innerHTML = '';
 
 		this.shadowRoot.appendChild(this.template);

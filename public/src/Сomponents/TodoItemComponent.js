@@ -81,17 +81,35 @@ template.innerHTML = `
 export default class TodoItemComponent extends HTMLElement {
 
 	_template;
+	_iconStatus;
+	_textInput;
+	_removeBtn;
 
 	constructor() {
 		super();
-		this.attachShadow({mode: "open"});
-		this._template = template.content.cloneNode(true);
+		this.attachShadow({mode: "open"});	
+		
 	}
 
 	/**
 	 * @returns {HTMLTemplateElement}
 	 */
-	get template() { return this._template }
+	get template() { return this._template; }
+
+	/**
+	 * @returns {HTMLTemplateElement}
+	 */
+	get iconStatus() { return this._iconStatus; }
+
+	/**
+	 * @returns {HTMLTemplateElement}
+	 */
+	get textInput() { return this._textInput; }
+
+	/**
+	 * @returns {HTMLTemplateElement}
+	 */
+	get removeBtn() { return this._removeBtn; }
 
 	connectedCallback(){
 		this.render();
@@ -103,68 +121,113 @@ export default class TodoItemComponent extends HTMLElement {
 	}
 
 	/**
-	 * Изменяет статус задания
+	 * Изменяет атрибут статуса задания и меняет его UI
 	 */
-	onChangeStatus() {
+	toggleStatus() {
 		if (this.getAttribute('status') === 'waiting') {
 			this.setAttribute('status', 'done');
 			
-			//TODO Исправить как в CreateItemComponent
-			this.shadowRoot.querySelector('label input[type=text]').style.textDecoration = 'line-through';
-			this.shadowRoot.querySelector('.icon-status').innerHTML = statusDone;
+			this.textInput.style.textDecoration = 'line-through';
+			this.iconStatus.innerHTML = statusDone;
 		}
 		else if (this.getAttribute('status') === 'done') {
 			this.setAttribute('status', 'waiting');
 
-			//TODO Исправить как в CreateItemComponent
-			this.shadowRoot.querySelector('label input[type=text]').style.textDecoration = '';
-			this.shadowRoot.querySelector('.icon-status').innerHTML = statusWaiting;
+			this.textInput.style.textDecoration = '';
+			this.iconStatus.innerHTML = statusWaiting;
 		}
+	}
+
+	/**
+	 * Изменяет статус задания
+	 */
+	onChangeStatus() {
+		this.toggleStatus();
+		this.dispatchEditTodo();
 	}
 
 	/**
 	 * Удаляет задание из общего списка
 	 */
 	onRemoveItem() {
+		this.dispatchDeleteTodo();
 		this.remove();
+	}
+
+	onChangeText() {
+		this.setAttribute('text', this.textInput.value);
+		this.dispatchEditTodo();
 	}
 
 	/**
 	 * Оформление подписок событий элемента
 	 */
 	subscribeEvents() {
-		//TODO Исправить как в CreateItemComponent
-		this.shadowRoot.querySelector('.icon-status').addEventListener('click', () => this.onChangeStatus());
-		this.shadowRoot.querySelector('.remove-item').addEventListener('click', () => this.onRemoveItem());
+		this.iconStatus.addEventListener('click', () => this.onChangeStatus());
+		this.removeBtn.addEventListener('click', () => this.onRemoveItem());
+		this.textInput.addEventListener('change', () => this.onChangeText());
 	}
 
 	/**
 	 * Отписка от всех событий
 	 */
 	unSubscribeEvents() {
-		//TODO Исправить как в CreateItemComponent
-		this.shadowRoot.querySelector('.icon-status').removeEventListener('click', () => this.onChangeStatus());
-		this.shadowRoot.querySelector('.remove-item').removeEventListener('click', () => this.onRemoveItem());
+		this.iconStatus.removeEventListener('click', () => this.onChangeStatus());
+		this.removeBtn.removeEventListener('click', () => this.onRemoveItem());
+		this.textInput.removeEventListener('change', () => this.onChangeText());
+	}
+
+	/**
+	 * Вызывает событие изменения элемента списка дел
+	 */
+	dispatchEditTodo() {
+		window.dispatchEvent(new CustomEvent('editTodo', {
+			detail: this.collectDataTodoItem()
+		}));
+	}
+
+	/**
+	 * Вызывает событие удаления элемента списка дел
+	 */
+	dispatchDeleteTodo() {
+		window.dispatchEvent(new CustomEvent('deleteTodo', { 
+			detail: this.collectDataTodoItem()
+		}));
+	}
+
+	/**
+	 * Собирает все пропсы в объект
+	 * @returns {Object}
+	 */
+	collectDataTodoItem() {
+		return {
+			id: this.getAttribute('task-id'),
+			text: this.getAttribute('text'),
+			date: this.getAttribute('date'),
+			status: this.getAttribute('status')
+		};
 	}
 
 	/**
 	 * Отрисовка элемента
 	 */
-	render() {
-		const id = this.getAttribute('task-id');
-		const text = this.getAttribute('text');
-		const date = this.getAttribute('date');
-		const status = this.getAttribute('status');
+	render() {		
+		this._template = template.content.cloneNode(true);
+
+		this._iconStatus = this.template.querySelector('.icon-status');
+		this._removeBtn = this.template.querySelector('.remove-item');
+		this._textInput = this.template.querySelector('label input[type=text]');
 
 		this.shadowRoot.innerHTML = '';
-		this.template.querySelector('li').setAttribute('task-id', id);
-		this.template.querySelector('input[type=checkbox]').setAttribute('name', id);
-		this.template.querySelector('label').setAttribute('for', id);
-		this.template.querySelector('label input[type=text]').value = text;
-		this.template.querySelector('.date').innerText = date;
 
-		//text-decoration: line-through;
-		if (status === 'done') {
+		this.template.querySelector('li').setAttribute('task-id', this.getAttribute('task-id'));
+		this.template.querySelector('input[type=checkbox]').setAttribute('name', this.getAttribute('task-id'));
+		this.template.querySelector('label').setAttribute('for', this.getAttribute('task-id'));
+		this.template.querySelector('label input[type=text]').value = this.getAttribute('text');
+		this.template.querySelector('.date').innerText = this.getAttribute('date');
+
+		//Отображает определенный индикатор статуса в зависимости от статуса задания
+		if (this.getAttribute('status') === 'done') {
 			this.template.querySelector('.icon-status').innerHTML = statusDone;
 			this.template.querySelector('label input[type=text]').style.textDecoration = 'line-through';
 		} else {
