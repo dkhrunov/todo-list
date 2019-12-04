@@ -4,10 +4,10 @@ body {
 	margin: 0;
 	padding: 0;
 	font-family: 'Roboto', sans-serif;
-	background: white;
 	color: #202020;
 	overflow-x: hidden;
 	overflow-y: hidden;
+	background: #e3e9ff;
 }
 
 #root {
@@ -23,7 +23,7 @@ body {
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
-	height: 7%;
+	height: 65px;
 	width: 100%;
 	font-size: 2em;
 	box-shadow: 0px 6px 20px #27272780;
@@ -39,18 +39,31 @@ body {
 
 .content {
 	display: flex;
+	flex-direction: column;
 	justify-content: center;
 	align-items: center;
-	height: 93%;
+	height: calc(100% - 65px);
 	width: 100%;
 	overflow-y: hidden;
 	overflow-x: hidden;
 	background: #e3e9ff;
 }
 
+#create-item {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 80%;
+	height: 5%;
+	padding: 20px;
+	background: white;
+	border-radius: 10px;
+	margin-bottom: 20px;
+}
+
 #todo-list {
-	width: 60%;
-	height: 80%;
+	width: 80%;
+	height: 70%;
 	padding: 20px;
 	overflow-x: hidden;
 	overflow-y: auto;
@@ -58,15 +71,13 @@ body {
 	border-radius: 10px;
 }
 
-/* Custom elements style */
-todo-list {
-	width: 50%;
-	height: 100%;
+/* Custom tags */
+create-item {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 100%;
 }
-
-/* Стили для checkbox */
-
-/* END */
 
 /* Стили для scrollbar */
 ::-webkit-scrollbar {

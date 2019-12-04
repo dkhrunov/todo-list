@@ -15,6 +15,14 @@ app.get('/', (req, res) => {
 	res.sendFile('index.html');
 })
 
+app.get('/login', (req, res) => {
+	res.redirect('/');
+})
+
+app.get('/todolist', (req, res) => {
+	res.end();
+});
+
 /**
  * Middleware обработки ошибок
  */

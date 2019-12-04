@@ -1,6 +1,6 @@
 const template = document.createElement('template');
 const statusWaiting = '<i class="fa fa-circle-o status-waiting" aria-hidden="true"></i>';
-const statusDone = '<i class="fa fa-check-circle status-done" aria-hidden="true"></i>';
+const statusDone = '<i class="fa fa-circle status-done" aria-hidden="true"></i>';
 
 template.innerHTML = `
 	<style>
@@ -18,11 +18,6 @@ template.innerHTML = `
 
 		li:hover {
 			border-color: #3b064d;
-			color: #3b064d;
-		}
-
-		li:hover input[type=text] {
-			color: #3b064d;
 		}
 
 		input[type=checkbox] {
@@ -47,11 +42,6 @@ template.innerHTML = `
 			outline: none;
 		}
 
-		input[type=text]:focus {
-			color: #3b064d;
-			border: none;
-		}
-
 		.date {
 			margin: 0 15px;
 		}
@@ -62,7 +52,7 @@ template.innerHTML = `
 		}
 
 		.status-done {
-			color: green;
+			color: #af7eeb;
 		}
 
 		.status-waiting {
@@ -70,13 +60,9 @@ template.innerHTML = `
 		}
 
 		.remove-item {
-			display: flex;
-			align-items: center;
-			justify-content: center;
-			width: 5%;
 			font-size: 1.3em;
 			cursor: pointer;
-			color: red;
+			/*color: red;*/
 		}
 
 	</style>
@@ -119,13 +105,19 @@ export default class TodoItemComponent extends HTMLElement {
 	/**
 	 * Изменяет статус задания
 	 */
-	handlerChangeStatus() {
+	onChangeStatus() {
 		if (this.getAttribute('status') === 'waiting') {
 			this.setAttribute('status', 'done');
+			
+			//TODO Исправить как в CreateItemComponent
+			this.shadowRoot.querySelector('label input[type=text]').style.textDecoration = 'line-through';
 			this.shadowRoot.querySelector('.icon-status').innerHTML = statusDone;
 		}
 		else if (this.getAttribute('status') === 'done') {
 			this.setAttribute('status', 'waiting');
+
+			//TODO Исправить как в CreateItemComponent
+			this.shadowRoot.querySelector('label input[type=text]').style.textDecoration = '';
 			this.shadowRoot.querySelector('.icon-status').innerHTML = statusWaiting;
 		}
 	}
@@ -133,7 +125,7 @@ export default class TodoItemComponent extends HTMLElement {
 	/**
 	 * Удаляет задание из общего списка
 	 */
-	handlerRemoveItem() {
+	onRemoveItem() {
 		this.remove();
 	}
 
@@ -141,16 +133,18 @@ export default class TodoItemComponent extends HTMLElement {
 	 * Оформление подписок событий элемента
 	 */
 	subscribeEvents() {
-		this.shadowRoot.querySelector('.icon-status').addEventListener('click', () => this.handlerChangeStatus());
-		this.shadowRoot.querySelector('.remove-item').addEventListener('click', () => this.handlerRemoveItem());
+		//TODO Исправить как в CreateItemComponent
+		this.shadowRoot.querySelector('.icon-status').addEventListener('click', () => this.onChangeStatus());
+		this.shadowRoot.querySelector('.remove-item').addEventListener('click', () => this.onRemoveItem());
 	}
 
 	/**
 	 * Отписка от всех событий
 	 */
 	unSubscribeEvents() {
-		this.shadowRoot.querySelector('.icon-status').removeEventListener('click', () => this.handlerChangeStatus());
-		this.shadowRoot.querySelector('.remove-item').removeEventListener('click', () => this.handlerRemoveItem());
+		//TODO Исправить как в CreateItemComponent
+		this.shadowRoot.querySelector('.icon-status').removeEventListener('click', () => this.onChangeStatus());
+		this.shadowRoot.querySelector('.remove-item').removeEventListener('click', () => this.onRemoveItem());
 	}
 
 	/**
@@ -163,15 +157,16 @@ export default class TodoItemComponent extends HTMLElement {
 		const status = this.getAttribute('status');
 
 		this.shadowRoot.innerHTML = '';
-
 		this.template.querySelector('li').setAttribute('task-id', id);
 		this.template.querySelector('input[type=checkbox]').setAttribute('name', id);
 		this.template.querySelector('label').setAttribute('for', id);
 		this.template.querySelector('label input[type=text]').value = text;
 		this.template.querySelector('.date').innerText = date;
 
+		//text-decoration: line-through;
 		if (status === 'done') {
 			this.template.querySelector('.icon-status').innerHTML = statusDone;
+			this.template.querySelector('label input[type=text]').style.textDecoration = 'line-through';
 		} else {
 			this.template.querySelector('.icon-status').innerHTML = statusWaiting;
 		}

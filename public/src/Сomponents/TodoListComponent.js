@@ -29,6 +29,7 @@ export default class TodoListComponent extends HTMLElement {
 	constructor() {
 		super();
 		this.attachShadow({mode: "open"});
+		this._template = template.content.cloneNode(true);
 		this.list = [
 			{
 				id: generateId(),
@@ -114,7 +115,7 @@ export default class TodoListComponent extends HTMLElement {
 	/**
 	 * @returns {HTMLTemplateElement}
 	 */
-	get template() { return this._template }
+	get template() { return this._template; }
 
 	connectedCallback() {
 		this.render();
@@ -124,24 +125,11 @@ export default class TodoListComponent extends HTMLElement {
 
 	}
 
-	// installListeners() {
-	// 	this.anchor.addEventListener('click', event => {
-	// 		if (event.target.localName !== 'span') return;
-	// 		this.props = {
-	// 			//...this.props,
-	// 			items: [
-	// 				...this.props.items.filter((item, i) => i != event.target.id)
-	// 			]
-	// 		}
-	// 	})
-	// }
-
 	/**
 	 * Отрисовка элемента
 	 */
 	render() {
 		this.shadowRoot.innerHTML = '';
-		this._template = template.content.cloneNode(true);
 
 		const fragment = document.createDocumentFragment();
 
@@ -156,18 +144,5 @@ export default class TodoListComponent extends HTMLElement {
 
 		this.template.querySelector('ul').appendChild(fragment);
 		this.shadowRoot.appendChild(this.template);
-
-		// let list = document.createElement('ul');
-		// list.classList.add('todo-list');
-
-		// this.props.items.map((item, i) => {
-		// 	const todoItemComponent = new TodoItemComponent(document.createElement('li'), { item: { text: item.text, id: i } });
-		// 	list.innerHTML +=	todoItemComponent.render();
-		// })
-
-		// this.clearAnchor();
-		// this.addChild(list);
-		
-		// return this.HtmlAsString();
 	}
 }

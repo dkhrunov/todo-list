@@ -24,7 +24,7 @@ export default class Component {
 	}
 
 	onCreate() {
-		console.log('Component created!');
+		
 	}
 
 	installListeners() {}
