@@ -33,22 +33,32 @@ export default class TodoListComponent extends HTMLElement {
 			{
 				id: generateRandomNum(),
 				text: 'Повседневная практика показывает, что начало повседневной работы.',
-				date: '03.12.19',
+				date: new Date('2019-10-17T03:24:00'),
 				status: 'waiting'
 			},
 			{
 				id: generateRandomNum(),
 				text: 'Повседневная практика показывает, что социально-экономическое развитие.',
-				date: '20.11.19',
+				date: new Date('2018-09-01T03:24:00'),
 				status: 'waiting'
 			},
 			{
 				id: generateRandomNum(),
 				text: 'Сделать тесты по всем предметам.',
-				date: '01.10.19',
+				date: new Date('2019-01-10T03:24:00'),
 				status: 'done'
 			},
 		];
+	}
+
+	/**
+	 * Сортирует список дел по дате (по возрастанию)
+	 */
+	sortListByDate() {
+		this.list.sort((curr, next) => {
+			//var dateA=new Date(a.retiredate), dateB=new Date(b.retiredate)
+			return curr.date-next.date //сортировка по возрастающей дате
+		})
 	}
 
 	/**
@@ -64,6 +74,16 @@ export default class TodoListComponent extends HTMLElement {
 	disconnectedCallback() {
 		this.unSubscribeEvents();
 	}
+
+	// TODO РЕАЛИЗОВАТЬ ЭТИ ДВА МЕТОДА -->
+	static get observedAttributes() {
+		return [/* массив имён атрибутов для отслеживания их изменений */];
+	}
+  
+	attributeChangedCallback(name, oldValue, newValue) {
+		// вызывается при изменении одного из перечисленных выше атрибутов
+	}
+	// <-- TODO РЕАЛИЗОВАТЬ ЭТИ ДВА МЕТОДА
 
 	/**
 	 * Обновляет список и рендерит новый список дел
@@ -127,9 +147,9 @@ export default class TodoListComponent extends HTMLElement {
 		this.list.push({
 			id: generateRandomNum(),
 			text: data.text,
-			date: formatDate(data.date),
+			date: data.date,
 			status: data.status
-		})
+		});
 	}
 
 	/**
@@ -160,12 +180,13 @@ export default class TodoListComponent extends HTMLElement {
 
 		const fragment = document.createDocumentFragment();
 		
+		this.sortListByDate();
 
 		this.list.map( ({ id, text, date, status }) => {
 			const todoItem = document.createElement('todo-item');
 			todoItem.setAttribute('task-id', id);
 			todoItem.setAttribute('text', text);
-			todoItem.setAttribute('date', date);
+			todoItem.setAttribute('date', formatDate(date));
 			todoItem.setAttribute('status', status);
 			fragment.appendChild(todoItem);
 		});
@@ -173,6 +194,6 @@ export default class TodoListComponent extends HTMLElement {
 		this.template.querySelector('ul').appendChild(fragment);
 		this.shadowRoot.appendChild(this.template);
 
-		setInterval(() => console.log(this.list), 5000);
+		//setInterval(() => console.log(this.list), 5000);
 	}
 }

@@ -102,15 +102,8 @@ export default class CreateItemComponent extends HTMLElement {
 	 * @param {HTMLEventElement} event 
 	 */
 	onSubmit(event) {
-		// Press Enter key or Press plus button
 		if (event.key === 'Enter' || event.target.tagName === "BUTTON") {
-			window.dispatchEvent(new CustomEvent('createTodo', { 
-				detail: {
-					text: this.newItemText.value,
-					date: new Date(),
-					status: 'waiting'
-				} 
-			}));
+			this.dispatchCreateTodo();			
 		}
 	}
 
@@ -138,6 +131,19 @@ export default class CreateItemComponent extends HTMLElement {
 		this.newItemText.removeEventListener('change', (event) => this.onChange(event));
 		this.addItemBtn.removeEventListener('click', (event) => this.onSubmit(event));
 		this.newItemText.removeEventListener('keydown', (event) => this.onSubmit(event));
+	}
+
+	/**
+	 * Вызывает событие создания задачи списка дел
+	 */
+	dispatchCreateTodo() {
+		window.dispatchEvent(new CustomEvent('createTodo', { 
+			detail: {
+				text: this.newItemText.value,
+				date: new Date(),
+				status: 'waiting'
+			} 
+		}));
 	}
 
 	/**

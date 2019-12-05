@@ -154,6 +154,9 @@ export default class TodoItemComponent extends HTMLElement {
 		this.remove();
 	}
 
+	/**
+	 * Изменяет текст задания
+	 */
 	onChangeText() {
 		this.setAttribute('text', this.textInput.value);
 		this.dispatchEditTodo();
@@ -178,16 +181,16 @@ export default class TodoItemComponent extends HTMLElement {
 	}
 
 	/**
-	 * Вызывает событие изменения элемента списка дел
+	 * Вызывает событие изменения задачи из списка дел
 	 */
 	dispatchEditTodo() {
 		window.dispatchEvent(new CustomEvent('editTodo', {
-			detail: this.collectDataTodoItem()
+			detail: this.collectDataTodoItem(false)
 		}));
 	}
 
 	/**
-	 * Вызывает событие удаления элемента списка дел
+	 * Вызывает событие удаления задачи из списка дел
 	 */
 	dispatchDeleteTodo() {
 		window.dispatchEvent(new CustomEvent('deleteTodo', { 
@@ -197,15 +200,25 @@ export default class TodoItemComponent extends HTMLElement {
 
 	/**
 	 * Собирает все пропсы в объект
+	 * @param {Boolean} needDate - флаг
 	 * @returns {Object}
 	 */
-	collectDataTodoItem() {
-		return {
-			id: this.getAttribute('task-id'),
-			text: this.getAttribute('text'),
-			date: this.getAttribute('date'),
-			status: this.getAttribute('status')
-		};
+	collectDataTodoItem(needDate = true) {
+		if (needDate) {
+			return {
+				id: this.getAttribute('task-id'),
+				text: this.getAttribute('text'),
+				date: this.getAttribute('date'),
+				status: this.getAttribute('status')
+			}
+		} else {
+			return {
+				id: this.getAttribute('task-id'),
+				text: this.getAttribute('text'),
+				status: this.getAttribute('status')
+			}
+		}
+		
 	}
 
 	/**
