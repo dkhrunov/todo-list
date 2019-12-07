@@ -14,4 +14,8 @@ window.addEventListener('changeRoute', event => {
 	router.changeRoute(event.detail.route);
 });
 
-window.dispatchEvent(new CustomEvent('changeRoute', { detail: { route: 'login' } }))
+if ( !router.isAuthorization() ) {
+	window.dispatchEvent(new CustomEvent('changeRoute', { detail: { route: 'login' } }))
+} else {
+	window.dispatchEvent(new CustomEvent('changeRoute', { detail: { route: 'todolist' } }))
+}

@@ -52,12 +52,11 @@ export default class TodoListComponent extends HTMLElement {
 	}
 
 	/**
-	 * Сортирует список дел по дате (по возрастанию)
+	 * Сортирует список дел по дате (от новых к старым)
 	 */
 	sortListByDate() {
 		this.list.sort((curr, next) => {
-			//var dateA=new Date(a.retiredate), dateB=new Date(b.retiredate)
-			return curr.date-next.date //сортировка по возрастающей дате
+			return next.date-curr.date;
 		})
 	}
 

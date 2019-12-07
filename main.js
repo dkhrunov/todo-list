@@ -20,7 +20,7 @@ app.get('/login', (req, res) => {
 })
 
 app.get('/todolist', (req, res) => {
-	res.end();
+	res.redirect('/');
 });
 
 /**

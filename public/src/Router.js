@@ -3,6 +3,8 @@ import routerConfig from '../routerConfig.js';
 export default class Router {
 	constructor(anchor){
 		this.anchor = anchor;
+
+		window.addEventListener('popstate', event => this.changeRoute(event.state.route));
 	}
 
 	changeRoute(route) {
@@ -10,7 +12,7 @@ export default class Router {
 
 		if (!conf) return;
 
-		window.history.pushState(conf.data, '', conf.route);
+		window.history.pushState(conf.data, '', conf.url);
 
 		const component = new conf.component();
 
@@ -25,4 +27,12 @@ export default class Router {
 
 		this.currentDomComponent  = DOMElement;
 	}
+
+	isAuthorization() {
+		if (window.localStorage.getItem('auth_token') !== null) { return true; }
+		
+		return false;
+	}
+
+
 }

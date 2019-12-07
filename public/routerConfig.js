@@ -3,13 +3,13 @@ import LoginPageComponent from './src/Сomponents/LoginPageComponent.js';
 
 const routerConfig = {
 	'login': {
-		data: {},
-		route: 'login',
+		data: { route: 'login' },
+		url: 'login',
 		component: LoginPageComponent,
 	},
 	'todolist': {
-		data: {},
-		route: 'todolist',
+		data: { route: 'todolist' },
+		url: 'todolist',
 		component: TodoListPageComponent,
 	}
 }
