@@ -28,7 +28,7 @@ export default class LoginPageComponent {
 
 	/**
 	 * Авторизация и перенаправление после успешной авторизации
-	 * @param {HTMLEventElement} event 
+	 * @param {Event} event 
 	 */
 	onSubmit(event) {
 		// TODO добавить авторизацию

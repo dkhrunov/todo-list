@@ -2,16 +2,6 @@ const template = document.createElement('template');
 
 template.innerHTML = `
 	<style>
-		input[type="text"] {			
-			width: 100%;
-			height: 100%;
-			outline: none;
-			border: none;
-			border-bottom: 2px solid #af7eeb;
-			font-size: 1em;
-			color: #999fc0;
-		}
-
 		.description {
 			font-size: 0.8em;
 			font-weight: bold;
@@ -25,6 +15,16 @@ template.innerHTML = `
 			display: flex;
 			justify-content: flex-end;
 			width: 50%;
+		}
+
+		input[type="text"] {			
+			width: 100%;
+			height: 100%;
+			outline: none;
+			border: none;
+			border-bottom: 2px solid #af7eeb;
+			font-size: 1em;
+			color: #999fc0;
 		}
 
 		.add-item-btn {
@@ -99,7 +99,7 @@ export default class CreateItemComponent extends HTMLElement {
 
 	/**
 	 * Сохранение нового елемента в списке
-	 * @param {HTMLEventElement} event 
+	 * @param {Event} event 
 	 */
 	onSubmit(event) {
 		if (event.key === 'Enter' || event.target.tagName === "BUTTON") {
@@ -109,7 +109,7 @@ export default class CreateItemComponent extends HTMLElement {
 
 	/**
 	 * Сохраняет занчение при его изменении
-	 * @param {HTMLEventElement} event 
+	 * @param {Event} event 
 	 */
 	onChange(event) {
 		this.newItemText.value = event.target.value;

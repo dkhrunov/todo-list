@@ -87,8 +87,7 @@ export default class TodoItemComponent extends HTMLElement {
 
 	constructor() {
 		super();
-		this.attachShadow({mode: "open"});	
-		
+		this.attachShadow({mode: "open"});
 	}
 
 	/**

@@ -24,6 +24,7 @@ template.innerHTML = `
 export default class TodoListComponent extends HTMLElement {
 
 	_template;
+	_ListWithoutFilters;
 
 	constructor() {
 		super();
@@ -48,7 +49,63 @@ export default class TodoListComponent extends HTMLElement {
 				date: new Date('2019-01-10T03:24:00'),
 				status: 'done'
 			},
+			{
+				id: generateRandomNum(),
+				text: 'Повседневная практика показывает, что начало повседневной работы.',
+				date: new Date('2019-10-17T03:24:00'),
+				status: 'waiting'
+			},
+			{
+				id: generateRandomNum(),
+				text: 'Повседневная практика показывает, что социально-экономическое развитие.',
+				date: new Date('2018-09-01T03:24:00'),
+				status: 'waiting'
+			},
+			{
+				id: generateRandomNum(),
+				text: 'Сделать тесты по всем предметам.',
+				date: new Date('2019-01-10T03:24:00'),
+				status: 'done'
+			},
+			{
+				id: generateRandomNum(),
+				text: 'Повседневная практика показывает, что начало повседневной работы.',
+				date: new Date('2019-10-17T03:24:00'),
+				status: 'waiting'
+			},
+			{
+				id: generateRandomNum(),
+				text: 'Повседневная практика показывает, что социально-экономическое развитие.',
+				date: new Date('2018-09-01T03:24:00'),
+				status: 'waiting'
+			},
+			{
+				id: generateRandomNum(),
+				text: 'Сделать тесты по всем предметам.',
+				date: new Date('2019-01-10T03:24:00'),
+				status: 'done'
+			},
+			{
+				id: generateRandomNum(),
+				text: 'Повседневная практика показывает, что начало повседневной работы.',
+				date: new Date('2019-10-17T03:24:00'),
+				status: 'waiting'
+			},
+			{
+				id: generateRandomNum(),
+				text: 'Повседневная практика показывает, что социально-экономическое развитие.',
+				date: new Date('2018-09-01T03:24:00'),
+				status: 'waiting'
+			},
+			{
+				id: generateRandomNum(),
+				text: 'Сделать тесты по всем предметам.',
+				date: new Date('2019-01-10T03:24:00'),
+				status: 'done'
+			},
 		];
+
+		this._ListWithoutFilters = this.list;
 	}
 
 	/**
@@ -86,7 +143,7 @@ export default class TodoListComponent extends HTMLElement {
 
 	/**
 	 * Обновляет список и рендерит новый список дел
-	 * @param {HTMLEventElement} event 
+	 * @param {Event} event 
 	 */
 	onCreateTodo(event) {
 		this.addTodoToList(event.detail);
@@ -95,7 +152,7 @@ export default class TodoListComponent extends HTMLElement {
 
 	/**
 	 * Удаляет элемент из списка дел и рендерит новый список дел
-	 * @param {HTMLEventElement} event 
+	 * @param {Event} event 
 	 */
 	onDeleteTodo(event) {
 		this.deleteTodoFromList(event.detail.id);
@@ -104,10 +161,19 @@ export default class TodoListComponent extends HTMLElement {
 
 	/**
 	 * Редактирует задачу в списке дел 
-	 * @param {HTMLEventElement} event 
+	 * @param {Event} event 
 	 */
 	onEditTodo(event) {
 		this.editTodoInList(event.detail);
+	}
+
+	/**
+	 * Фильтрует список дел
+	 * @param {Event} event 
+	 */
+	onFilterTodo(event) {
+		this.filterTodoList(event.detail.filteredBy)
+		this.render();
 	}
 
 
@@ -118,6 +184,7 @@ export default class TodoListComponent extends HTMLElement {
 		window.addEventListener('createTodo', (event) => this.onCreateTodo(event));
 		window.addEventListener('deleteTodo', (event) => this.onDeleteTodo(event));
 		window.addEventListener('editTodo', (event) => this.onEditTodo(event));
+		window.addEventListener('filterTodo', (event) => this.onFilterTodo(event));
 	}
 
 	/**
@@ -127,6 +194,7 @@ export default class TodoListComponent extends HTMLElement {
 		window.removeEventListener('createTodo', (event) => this.onCreateTodo(event));
 		window.removeEventListener('deleteTodo', (event) => this.onDeleteTodo(event));
 		window.removeEventListener('editTodo', (event) => this.onEditTodo(event));
+		window.removeEventListener('filterTodo', (event) => this.onFilterTodo(event));
 	}
 
 	/**
@@ -167,6 +235,19 @@ export default class TodoListComponent extends HTMLElement {
 		let todo = this.findTodoInList(data.id);
 		// заменяет в первом аргументе одинаковые поля со вторым аргументом, на значения второго аргумента
 		Object.assign(todo, data);
+	}
+
+	/**
+	 * Фильтрация списка дел по парметру
+	 * @param {String} filter - может быть all, done, waiting 
+	 */
+	filterTodoList(filter) {
+		this.list = this._ListWithoutFilters;
+		if (filter === 'all') {
+			return;
+		} else {
+			this.list = this.list.filter(item => item.status === filter);
+		}
 	}
 
 	/**

@@ -49,7 +49,7 @@ body {
 	background: #e3e9ff;
 }
 
-#create-item {
+.content #create-item {
 	display: flex;
 	justify-content: center;
 	align-items: center;
@@ -61,14 +61,27 @@ body {
 	margin-bottom: 20px;
 }
 
-#todo-list {
+
+.content #todo-filter {
+	display: flex;
+	justify-content: center;
+	align-items: center;
 	width: 80%;
-	height: 70%;
-	padding: 20px;
+	height: 5%;
+	padding: 0 20px;
+	background: white;
+	border-radius: 10px 10px 0 0;
+	/* margin-bottom: 20px; */
+}
+
+.content #todo-list {
+	width: 80%;
+	height: 65%;
+	padding: 0 20px 20px 20px;
 	overflow-x: hidden;
 	overflow-y: auto;
 	background: white;
-	border-radius: 10px;
+	border-radius: 0 0 10px 10px ;
 }
 
 /* Custom tags */
@@ -76,6 +89,10 @@ create-item {
 	display: flex;
 	justify-content: center;
 	align-items: center;
+	width: 100%;
+}
+
+todo-filter {
 	width: 100%;
 }
 

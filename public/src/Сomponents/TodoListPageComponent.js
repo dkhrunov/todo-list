@@ -7,31 +7,37 @@ export default class TodoListPageComponent {
 	}
 
 	/**
-	 * Отрисовка элемента
+	 * Отрисовка страницы
 	 */
 	render() {
-		const headerElement = document.createElement('div');
-		headerElement.classList.add('header');
-		this.fragment.appendChild(headerElement);
+		const headerBlock = document.createElement('div');
+		headerBlock.classList.add('header');
+		this.fragment.appendChild(headerBlock);
 
-		const contentElement = document.createElement('div');
-		contentElement.classList.add('content');
-		this.fragment.appendChild(contentElement);
+		const contentBlock = document.createElement('div');
+		contentBlock.classList.add('content');
+		this.fragment.appendChild(contentBlock);
 
-		const createItemElement = document.createElement('div');
-		createItemElement.id = 'create-item';
-		contentElement.appendChild(createItemElement);
+		const createItemBlock = document.createElement('div');
+		createItemBlock.id = 'create-item';
+		contentBlock.appendChild(createItemBlock);
 
-		const todoListElement = document.createElement('div');
-		todoListElement.id = 'todo-list';
-		contentElement.appendChild(todoListElement);
+		const todoFilterBlock = document.createElement('div');
+		todoFilterBlock.id = 'todo-filter';
+		contentBlock.appendChild(todoFilterBlock);
 
-		const header = new HeaderComponent(headerElement, { appName: 'Todo List' });
+		const todoListBlock = document.createElement('div');
+		todoListBlock.id = 'todo-list';
+		contentBlock.appendChild(todoListBlock);
+
+		const header = new HeaderComponent(headerBlock, { appName: 'Todo List' });
 		const createItem = document.createElement('create-item');
+		const todoFilter = document.createElement('todo-filter');
 		const todoList = document.createElement('todo-list');
 
-		createItemElement.appendChild(createItem);
-		todoListElement.appendChild(todoList);
+		createItemBlock.appendChild(createItem);
+		todoFilterBlock.appendChild(todoFilter);
+		todoListBlock.appendChild(todoList);
 
 		return this.fragment;
 	}
