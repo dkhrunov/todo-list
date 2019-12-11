@@ -1,3 +1,5 @@
+import Store from '../Store/Store.js';
+
 const template = document.createElement('template');
 const statusWaiting = '<i class="fa fa-circle-o status-waiting" aria-hidden="true"></i>';
 const statusDone = '<i class="fa fa-circle status-done" aria-hidden="true"></i>';
@@ -150,7 +152,6 @@ export default class TodoItemComponent extends HTMLElement {
 	 */
 	onRemoveItem() {
 		this.dispatchDeleteTodo();
-		this.remove();
 	}
 
 	/**
@@ -183,41 +184,30 @@ export default class TodoItemComponent extends HTMLElement {
 	 * Вызывает событие изменения задачи из списка дел
 	 */
 	dispatchEditTodo() {
-		window.dispatchEvent(new CustomEvent('editTodo', {
-			detail: this.collectDataTodoItem(false)
-		}));
+		Store.dispatch('editTodo', this.getTodoData());
+		// window.dispatchEvent(new CustomEvent('editTodo', {
+		// 	detail: this.getTodoData(false)
+		// }));
 	}
 
 	/**
 	 * Вызывает событие удаления задачи из списка дел
 	 */
 	dispatchDeleteTodo() {
-		window.dispatchEvent(new CustomEvent('deleteTodo', { 
-			detail: this.collectDataTodoItem()
-		}));
+		Store.dispatch('removeTodo', this.getTodoData());
 	}
 
 	/**
 	 * Собирает все пропсы в объект
-	 * @param {Boolean} needDate - флаг
 	 * @returns {Object}
 	 */
-	collectDataTodoItem(needDate = true) {
-		if (needDate) {
-			return {
-				id: this.getAttribute('task-id'),
-				text: this.getAttribute('text'),
-				date: this.getAttribute('date'),
-				status: this.getAttribute('status')
-			}
-		} else {
-			return {
-				id: this.getAttribute('task-id'),
-				text: this.getAttribute('text'),
-				status: this.getAttribute('status')
-			}
+	getTodoData() {
+		return {
+			id: this.getAttribute('task-id'),
+			text: this.getAttribute('text'),
+			date: Store.state.todo.find(item => item.id == this.getAttribute('task-id')).date,
+			status: this.getAttribute('status')
 		}
-		
 	}
 
 	/**

@@ -1,4 +1,4 @@
-import routerConfig from '../routerConfig.js';
+import routerConfig from './routerConfig.js';
 
 export default class Router {
 	constructor(anchor){

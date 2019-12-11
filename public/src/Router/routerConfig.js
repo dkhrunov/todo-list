@@ -1,5 +1,5 @@
-import TodoListPageComponent from './src/Сomponents/TodoListPageComponent.js';
-import LoginPageComponent from './src/Сomponents/LoginPageComponent.js';
+import TodoListPageComponent from '../Pages/TodoListPageComponent.js';
+import LoginPageComponent from '../Pages/LoginPageComponent.js';
 
 const routerConfig = {
 	'login': {

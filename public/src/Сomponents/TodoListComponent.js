@@ -1,5 +1,6 @@
 import TodoItemComponent from './TodoItemComponent.js';
-import { generateRandomNum, formatDate } from '../Utilities/utilities.js';
+import { formatDate } from '../Utilities/utilities.js';
+import Store from '../Store/Store.js';
 
 customElements.define('todo-item', TodoItemComponent);
 
@@ -29,92 +30,20 @@ export default class TodoListComponent extends HTMLElement {
 	constructor() {
 		super();
 		this.attachShadow({mode: "open"});
-		
-		this.list = [
-			{
-				id: generateRandomNum(),
-				text: 'Повседневная практика показывает, что начало повседневной работы.',
-				date: new Date('2019-10-17T03:24:00'),
-				status: 'waiting'
-			},
-			{
-				id: generateRandomNum(),
-				text: 'Повседневная практика показывает, что социально-экономическое развитие.',
-				date: new Date('2018-09-01T03:24:00'),
-				status: 'waiting'
-			},
-			{
-				id: generateRandomNum(),
-				text: 'Сделать тесты по всем предметам.',
-				date: new Date('2019-01-10T03:24:00'),
-				status: 'done'
-			},
-			{
-				id: generateRandomNum(),
-				text: 'Повседневная практика показывает, что начало повседневной работы.',
-				date: new Date('2019-10-17T03:24:00'),
-				status: 'waiting'
-			},
-			{
-				id: generateRandomNum(),
-				text: 'Повседневная практика показывает, что социально-экономическое развитие.',
-				date: new Date('2018-09-01T03:24:00'),
-				status: 'waiting'
-			},
-			{
-				id: generateRandomNum(),
-				text: 'Сделать тесты по всем предметам.',
-				date: new Date('2019-01-10T03:24:00'),
-				status: 'done'
-			},
-			{
-				id: generateRandomNum(),
-				text: 'Повседневная практика показывает, что начало повседневной работы.',
-				date: new Date('2019-10-17T03:24:00'),
-				status: 'waiting'
-			},
-			{
-				id: generateRandomNum(),
-				text: 'Повседневная практика показывает, что социально-экономическое развитие.',
-				date: new Date('2018-09-01T03:24:00'),
-				status: 'waiting'
-			},
-			{
-				id: generateRandomNum(),
-				text: 'Сделать тесты по всем предметам.',
-				date: new Date('2019-01-10T03:24:00'),
-				status: 'done'
-			},
-			{
-				id: generateRandomNum(),
-				text: 'Повседневная практика показывает, что начало повседневной работы.',
-				date: new Date('2019-10-17T03:24:00'),
-				status: 'waiting'
-			},
-			{
-				id: generateRandomNum(),
-				text: 'Повседневная практика показывает, что социально-экономическое развитие.',
-				date: new Date('2018-09-01T03:24:00'),
-				status: 'waiting'
-			},
-			{
-				id: generateRandomNum(),
-				text: 'Сделать тесты по всем предметам.',
-				date: new Date('2019-01-10T03:24:00'),
-				status: 'done'
-			},
-		];
+		this.store = Store;
+		this.list = Store.state.todo;
 
 		this._ListWithoutFilters = this.list;
 	}
 
 	/**
 	 * Сортирует список дел по дате (от новых к старым)
+	 * и возвращает отсортированный массив
+	 * @param {Array} todo
+	 * @returns {Array}
 	 */
-	sortListByDate() {
-		this.list.sort((curr, next) => {
-			return next.date-curr.date;
-		})
+	sortTodoByDate(todo) {
+		return todo.sort((curr, next) => next.date-curr.date);
 	}
 
 	/**
@@ -123,7 +52,7 @@ export default class TodoListComponent extends HTMLElement {
 	get template() { return this._template; }
 
 	connectedCallback() {
-		this.render();
+		this.render(Store.state.todo);
 		this.subscribeEvents();
 	}
 
@@ -140,24 +69,6 @@ export default class TodoListComponent extends HTMLElement {
 		// вызывается при изменении одного из перечисленных выше атрибутов
 	}
 	// <-- TODO РЕАЛИЗОВАТЬ ЭТИ ДВА МЕТОДА
-
-	/**
-	 * Обновляет список и рендерит новый список дел
-	 * @param {Event} event 
-	 */
-	onCreateTodo(event) {
-		this.addTodoToList(event.detail);
-		this.render();
-	}
-
-	/**
-	 * Удаляет элемент из списка дел и рендерит новый список дел
-	 * @param {Event} event 
-	 */
-	onDeleteTodo(event) {
-		this.deleteTodoFromList(event.detail.id);
-		//this.render();
-	}
 
 	/**
 	 * Редактирует задачу в списке дел 
@@ -181,8 +92,7 @@ export default class TodoListComponent extends HTMLElement {
 	 * Оформление подписок событий элемента
 	 */
 	subscribeEvents() {
-		window.addEventListener('createTodo', (event) => this.onCreateTodo(event));
-		window.addEventListener('deleteTodo', (event) => this.onDeleteTodo(event));
+		Store.events.subscribe('change', state => this.render(state.todo) );
 		window.addEventListener('editTodo', (event) => this.onEditTodo(event));
 		window.addEventListener('filterTodo', (event) => this.onFilterTodo(event));
 	}
@@ -191,8 +101,7 @@ export default class TodoListComponent extends HTMLElement {
 	 * Отписка от всех событий
 	 */
 	unSubscribeEvents() {
-		window.removeEventListener('createTodo', (event) => this.onCreateTodo(event));
-		window.removeEventListener('deleteTodo', (event) => this.onDeleteTodo(event));
+		Store.events.subscribe('change', state => this.render(state.todo) );
 		window.removeEventListener('editTodo', (event) => this.onEditTodo(event));
 		window.removeEventListener('filterTodo', (event) => this.onFilterTodo(event));
 	}
@@ -204,27 +113,6 @@ export default class TodoListComponent extends HTMLElement {
 	 */
 	findTodoInList(id) {
 		return this.list.filter(item => item.id === id)[0];
-	}
-
-	/**
-	 * Добваляет новое задание в список
-	 * @param {Object} data
-	 */
-	addTodoToList(data) {
-		this.list.push({
-			id: generateRandomNum(),
-			text: data.text,
-			date: data.date,
-			status: data.status
-		});
-	}
-
-	/**
-	 * Удаляет из списка дел элемент по id
-	 * @param {String} id
-	 */
-	deleteTodoFromList(id) {
-		this.list = this.list.filter(item => item.id !== id);
 	}
 
 	/**
@@ -252,17 +140,16 @@ export default class TodoListComponent extends HTMLElement {
 
 	/**
 	 * Отрисовка элемента
+	 * @param {Array} todo
 	 */
-	render() {
+	render(todo) {
 		this._template = template.content.cloneNode(true);
 		
 		this.shadowRoot.innerHTML = '';
 
 		const fragment = document.createDocumentFragment();
-		
-		this.sortListByDate();
 
-		this.list.map( ({ id, text, date, status }) => {
+		this.sortTodoByDate(todo).map( ({ id, text, date, status }) => {
 			const todoItem = document.createElement('todo-item');
 			todoItem.setAttribute('task-id', id);
 			todoItem.setAttribute('text', text);

@@ -1,4 +1,4 @@
-import HeaderComponent from './HeaderComponent.js';
+import HeaderComponent from '../Сomponents/HeaderComponent.js';
 
 // TODO разбить логику render
 export default class TodoListPageComponent {

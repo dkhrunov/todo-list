@@ -1,3 +1,6 @@
+import Store from '../Store/Store.js';
+import { generateRandomNum } from '../Utilities/utilities.js';
+
 const template = document.createElement('template');
 
 template.innerHTML = `
@@ -35,15 +38,12 @@ template.innerHTML = `
 		}
 
 		button {
-			padding: 0;
 			outline: none;
 			border: 2px solid #af7eeb;
-			border-radius: 50%;
-			background: white;
-			color: #af7eeb;
-			width: 1.3em;
-			height: 1.3em;
-			font-size: 1.3em;
+			border-radius: 8px;
+			background: #af7eeb;
+			color: white;
+			font-size: 1em;
 			cursor: pointer;
 			transition: 0.1s;
 		}
@@ -59,7 +59,7 @@ template.innerHTML = `
 	<div class="item-text">
 		<input type="text" >
 	</div>
-	<div class="add-item-btn"><button>+</button></div>
+	<div class="add-item-btn"><button>Submit</button></div>
 `
 
 export default class CreateItemComponent extends HTMLElement {
@@ -102,8 +102,9 @@ export default class CreateItemComponent extends HTMLElement {
 	 * @param {Event} event 
 	 */
 	onSubmit(event) {
-		if (event.key === 'Enter' || event.target.tagName === "BUTTON") {
-			this.dispatchCreateTodo();			
+		if ((event.key === 'Enter' || event.target.tagName === "BUTTON") && this.newItemText.value) {
+			this.dispatchCreateTodo();
+			this.clearInput();
 		}
 	}
 
@@ -137,13 +138,27 @@ export default class CreateItemComponent extends HTMLElement {
 	 * Вызывает событие создания задачи списка дел
 	 */
 	dispatchCreateTodo() {
-		window.dispatchEvent(new CustomEvent('createTodo', { 
-			detail: {
-				text: this.newItemText.value,
-				date: new Date(),
-				status: 'waiting'
-			} 
-		}));
+		Store.dispatch('addTodo', this.getNewTodoData());
+	}
+
+	/**
+	 * Возвращает объект с данными для нового todo
+	 * @returns {Object}
+	 */
+	getNewTodoData() {
+		return {
+			id: generateRandomNum(),
+			text: this.newItemText.value,
+			date: new Date(),
+			status: 'waiting'
+		}
+	}
+
+	/**
+	 * Очищает поле
+	 */
+	clearInput() {
+		this.newItemText.value = '';
 	}
 
 	/**

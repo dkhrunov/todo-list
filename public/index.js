@@ -1,8 +1,7 @@
 import TodoListComponent from './src/Сomponents/TodoListComponent.js';
 import CreateItemComponent from './src/Сomponents/CreateItemComponent.js';
 import TodoFilterComponent from './src/Сomponents/TodoFilterComponent.js';
-import Router from './src/Router.js';
-
+import Router from './src/Router/Router.js';
 
 customElements.define('create-item', CreateItemComponent);
 customElements.define('todo-list', TodoListComponent);
