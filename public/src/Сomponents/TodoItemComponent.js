@@ -1,4 +1,5 @@
 import Store from '../Store/Store.js';
+import { formatDate } from '../Utilities/utilities.js';
 
 const template = document.createElement('template');
 const statusWaiting = '<i class="fa fa-circle-o status-waiting" aria-hidden="true"></i>';
@@ -158,8 +159,12 @@ export default class TodoItemComponent extends HTMLElement {
 	 * Изменяет текст задания
 	 */
 	onChangeText() {
-		this.setAttribute('text', this.textInput.value);
-		this.dispatchEditTodo();
+		if (this.textInput.value == '') {
+			this.textInput.value = this.getAttribute('text');
+		} else {
+			this.setAttribute('text', this.textInput.value);
+			this.dispatchEditTodo();
+		}
 	}
 
 	/**
@@ -185,9 +190,6 @@ export default class TodoItemComponent extends HTMLElement {
 	 */
 	dispatchEditTodo() {
 		Store.dispatch('editTodo', this.getTodoData());
-		// window.dispatchEvent(new CustomEvent('editTodo', {
-		// 	detail: this.getTodoData(false)
-		// }));
 	}
 
 	/**
@@ -205,7 +207,7 @@ export default class TodoItemComponent extends HTMLElement {
 		return {
 			id: this.getAttribute('task-id'),
 			text: this.getAttribute('text'),
-			date: Store.state.todo.find(item => item.id == this.getAttribute('task-id')).date,
+			date: new Date(this.getAttribute('date')),
 			status: this.getAttribute('status')
 		}
 	}
@@ -226,9 +228,9 @@ export default class TodoItemComponent extends HTMLElement {
 		this.template.querySelector('input[type=checkbox]').setAttribute('name', this.getAttribute('task-id'));
 		this.template.querySelector('label').setAttribute('for', this.getAttribute('task-id'));
 		this.template.querySelector('label input[type=text]').value = this.getAttribute('text');
-		this.template.querySelector('.date').innerText = this.getAttribute('date');
+		this.template.querySelector('.date').innerText = formatDate(new Date(this.getAttribute('date')));
 
-		//Отображает определенный индикатор статуса в зависимости от статуса задания
+		/* Отображает определенный индикатор статуса в зависимости от статуса задания */
 		if (this.getAttribute('status') === 'done') {
 			this.template.querySelector('.icon-status').innerHTML = statusDone;
 			this.template.querySelector('label input[type=text]').style.textDecoration = 'line-through';

@@ -2,6 +2,7 @@ import TodoListComponent from './src/Сomponents/TodoListComponent.js';
 import CreateItemComponent from './src/Сomponents/CreateItemComponent.js';
 import TodoFilterComponent from './src/Сomponents/TodoFilterComponent.js';
 import Router from './src/Router/Router.js';
+import Store from './src/Store/Store.js';
 
 customElements.define('create-item', CreateItemComponent);
 customElements.define('todo-list', TodoListComponent);
@@ -20,3 +21,5 @@ if ( !router.isAuthorization() ) {
 } else {
 	window.dispatchEvent(new CustomEvent('changeRoute', { detail: { route: 'todolist' } }));
 }
+
+window.Store = Store;

@@ -66,7 +66,7 @@ export default class TodoListComponent extends HTMLElement {
 	}
   
 	attributeChangedCallback(name, oldValue, newValue) {
-		// вызывается при изменении одного из перечисленных выше атрибутов
+		/* вызывается при изменении одного из перечисленных выше атрибутов */
 	}
 	// <-- TODO РЕАЛИЗОВАТЬ ЭТИ ДВА МЕТОДА
 
@@ -121,7 +121,7 @@ export default class TodoListComponent extends HTMLElement {
 	 */
 	editTodoInList(data) {
 		let todo = this.findTodoInList(data.id);
-		// заменяет в первом аргументе одинаковые поля со вторым аргументом, на значения второго аргумента
+		/* заменяет в первом аргументе одинаковые поля со вторым аргументом, на значения второго аргумента */
 		Object.assign(todo, data);
 	}
 
@@ -153,7 +153,7 @@ export default class TodoListComponent extends HTMLElement {
 			const todoItem = document.createElement('todo-item');
 			todoItem.setAttribute('task-id', id);
 			todoItem.setAttribute('text', text);
-			todoItem.setAttribute('date', formatDate(date));
+			todoItem.setAttribute('date', date);
 			todoItem.setAttribute('status', status);
 			fragment.appendChild(todoItem);
 		});

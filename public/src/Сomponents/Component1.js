@@ -39,7 +39,7 @@ export default class Component {
 		this.anchor.innerHTML = null;
 	}
 
-	// Методы для композиции компонента
+	/* Методы для композиции компонента */
 
 	/**
 	 * Добавляет себя в переданный параметр HTMLElement
