@@ -12,5 +12,9 @@ export default function createReducers() {
 			...state,
 			todo: [ ...state.todo.filter(item => item.id != payload.id), payload ],
 		}),
+		changeFilter: (payload, state) => ({
+			...state,
+			selectedFilter: payload,
+		}),
 	}
 }

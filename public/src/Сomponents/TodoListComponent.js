@@ -71,20 +71,11 @@ export default class TodoListComponent extends HTMLElement {
 	// <-- TODO РЕАЛИЗОВАТЬ ЭТИ ДВА МЕТОДА
 
 	/**
-	 * Редактирует задачу в списке дел 
-	 * @param {Event} event 
-	 */
-	onEditTodo(event) {
-		this.editTodoInList(event.detail);
-	}
-
-	/**
 	 * Фильтрует список дел
 	 * @param {Event} event 
 	 */
 	onFilterTodo(event) {
-		this.filterTodoList(event.detail.filteredBy)
-		this.render();
+		this.filterTodoList(event.detail.filteredBy);
 	}
 
 
@@ -93,7 +84,6 @@ export default class TodoListComponent extends HTMLElement {
 	 */
 	subscribeEvents() {
 		Store.events.subscribe('change', state => this.render(state.todo) );
-		window.addEventListener('editTodo', (event) => this.onEditTodo(event));
 		window.addEventListener('filterTodo', (event) => this.onFilterTodo(event));
 	}
 
@@ -102,7 +92,6 @@ export default class TodoListComponent extends HTMLElement {
 	 */
 	unSubscribeEvents() {
 		Store.events.subscribe('change', state => this.render(state.todo) );
-		window.removeEventListener('editTodo', (event) => this.onEditTodo(event));
 		window.removeEventListener('filterTodo', (event) => this.onFilterTodo(event));
 	}
 
@@ -116,26 +105,13 @@ export default class TodoListComponent extends HTMLElement {
 	}
 
 	/**
-	 * Заменяет значения задачи на новые в списке дел
-	 * @param {Object} data
-	 */
-	editTodoInList(data) {
-		let todo = this.findTodoInList(data.id);
-		/* заменяет в первом аргументе одинаковые поля со вторым аргументом, на значения второго аргумента */
-		Object.assign(todo, data);
-	}
-
-	/**
 	 * Фильтрация списка дел по парметру
 	 * @param {String} filter - может быть all, done, waiting 
 	 */
 	filterTodoList(filter) {
-		this.list = this._ListWithoutFilters;
-		if (filter === 'all') {
-			return;
-		} else {
-			this.list = this.list.filter(item => item.status === filter);
-		}
+		Store.dispatch('changeFilter', filter);
+
+		this.render(Store.state.todo);
 	}
 
 	/**
@@ -149,7 +125,17 @@ export default class TodoListComponent extends HTMLElement {
 
 		const fragment = document.createDocumentFragment();
 
-		this.sortTodoByDate(todo).map( ({ id, text, date, status }) => {
+		// TODO переделать изящнее -->
+		let sortedTodo = this.sortTodoByDate(todo);
+		let sortedAndFilteredTodo = sortedTodo;
+
+		if (Store.state.selectedFilter !== 'all') {
+			sortedAndFilteredTodo = sortedTodo.filter(item => item.status === Store.state.selectedFilter);
+		}
+		
+		// <-- TODO переделать изящнее 
+
+		sortedAndFilteredTodo.map( ({ id, text, date, status }) => {
 			const todoItem = document.createElement('todo-item');
 			todoItem.setAttribute('task-id', id);
 			todoItem.setAttribute('text', text);

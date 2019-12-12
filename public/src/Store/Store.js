@@ -25,6 +25,7 @@ class Store {
 					status: 'done'
 				},
 			],
+			selectedFilter: 'all',
 		}
 		this.events = new Observer();
 	}
