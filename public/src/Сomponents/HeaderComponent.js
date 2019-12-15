@@ -1,18 +1,53 @@
-import Component from './Component1.js';
+const template = document.createElement('template');
 
-export default class HeaderComponent extends Component {
-	constructor(anchor, props) {
-		super(anchor, props);
+template.innerHTML = `
+	<style>
+		
+	</style>
+	<div class="app-name">Todo List</div>
+`;
+
+
+export default class HeaderComponent extends HTMLElement {
+
+	_template;
+
+	constructor() {
+		super();
+		this.attachShadow({mode: "open"});		
+	}
+
+	/**
+	 * @returns {HTMLTemplateElement}
+	 */
+	get template() { return this._template; }
+
+	connectedCallback(){
+		this.render();
+		this.subscribeEvents();
+	}
+
+	disconnectedCallback() {
+		this.unSubscribeEvents();
+	}
+
+	/**
+	 * Оформление подписок событий элемента
+	 */
+	subscribeEvents() {
+
+	}
+
+	/**
+	 * Отписка от всех событий
+	 */
+	unSubscribeEvents() {
+		
 	}
 
 	render() {
-		return `
-			<div class="app-name">${this.props.appName}</div>
-		`;
-		let appName = document.createElement('div');
-		appName.classList.add('app-name');
-		appName.style.marginLeft = '10px';
-		appName.innerText = this.props.appName;
-		this.anchor.appendChild(appName);
+		this._template = template.content.cloneNode(true);
+		this.shadowRoot.innerHTML = '';
+		this.shadowRoot.appendChild(this.template);
 	}
 }

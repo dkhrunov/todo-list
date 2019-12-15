@@ -1,5 +1,3 @@
-import HeaderComponent from '../Сomponents/HeaderComponent.js';
-
 // TODO разбить логику render
 export default class TodoListPageComponent {
 	constructor() {
@@ -30,11 +28,12 @@ export default class TodoListPageComponent {
 		todoListBlock.id = 'todo-list';
 		contentBlock.appendChild(todoListBlock);
 
-		const header = new HeaderComponent(headerBlock, { appName: 'Todo List' });
+		const headerComponent = document.createElement('header-component');
 		const createItem = document.createElement('create-item');
 		const todoFilter = document.createElement('todo-filter');
 		const todoList = document.createElement('todo-list');
 
+		headerBlock.appendChild(headerComponent);
 		createItemBlock.appendChild(createItem);
 		todoFilterBlock.appendChild(todoFilter);
 		todoListBlock.appendChild(todoList);
