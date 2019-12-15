@@ -119,11 +119,11 @@ export default class TodoFilterComponent extends HTMLElement {
 	}
 
 	/**
-	 * Вызывает событие фильтрации списка дел
-	 * @param {String} filter
+	 * Фильтрация списка дел по парметру
+	 * @param {String} filter - может быть all, done, waiting 
 	 */
 	dispatchFilterTodo(filter) {
-		window.dispatchEvent(new CustomEvent('filterTodo', { detail: { filteredBy: filter } }))
+		Store.dispatch('changeFilter', filter);		
 	}
 
 	/**

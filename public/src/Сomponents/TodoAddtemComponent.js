@@ -55,14 +55,14 @@ template.innerHTML = `
 		}
 	</style>
 	
-	<div class="description">Добавить новое событие:</div>
+	<div class="description">Добавить новую задачу:</div>
 	<div class="item-text">
 		<input type="text" >
 	</div>
-	<div class="add-item-btn"><button>Submit</button></div>
+	<div class="add-item-btn"><button>Добавить</button></div>
 `
 
-export default class CreateItemComponent extends HTMLElement {
+export default class TodoAddtemComponent extends HTMLElement {
 
 	_template;
 	_newItemText = '';

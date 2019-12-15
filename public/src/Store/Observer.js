@@ -10,8 +10,8 @@ export default class Observer {
 		this.subscribers[event].push(callback);
 	}
 
-	unsubscribe() {
-		
+	unsubscribe(event, callback) {
+		this.subscribers[event].pop(callback);
 	}
 
 	notify(event, payload) {

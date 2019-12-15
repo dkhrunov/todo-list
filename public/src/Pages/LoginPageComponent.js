@@ -33,7 +33,7 @@ export default class LoginPageComponent {
 	onSubmit(event) {
 		// TODO добавить авторизацию
 		//if (this.inputLogin.value == 'admin' && this.inputPassword.value == 'admin') {
-			window.localStorage.setItem('auth_token', 'ea135929105c4f29a0f5117d2960926f')
+			window.localStorage.setItem('auth_token', 'ea135929105c4f29a0f5117d2960926f');
 			window.dispatchEvent(new CustomEvent('changeRoute', { detail: { route: 'todolist' } }));
 		//}
 		event.preventDefault();

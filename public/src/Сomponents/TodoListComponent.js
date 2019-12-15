@@ -25,25 +25,11 @@ template.innerHTML = `
 export default class TodoListComponent extends HTMLElement {
 
 	_template;
-	_ListWithoutFilters;
 
 	constructor() {
 		super();
 		this.attachShadow({mode: "open"});
 		this.store = Store;
-		this.list = Store.state.todo;
-
-		this._ListWithoutFilters = this.list;
-	}
-
-	/**
-	 * Сортирует список дел по дате (от новых к старым)
-	 * и возвращает отсортированный массив
-	 * @param {Array} todo
-	 * @returns {Array}
-	 */
-	sortTodoByDate(todo) {
-		return todo.sort((curr, next) => next.date-curr.date);
 	}
 
 	/**
@@ -71,47 +57,29 @@ export default class TodoListComponent extends HTMLElement {
 	// <-- TODO РЕАЛИЗОВАТЬ ЭТИ ДВА МЕТОДА
 
 	/**
-	 * Фильтрует список дел
-	 * @param {Event} event 
-	 */
-	onFilterTodo(event) {
-		this.filterTodoList(event.detail.filteredBy);
-	}
-
-
-	/**
 	 * Оформление подписок событий элемента
 	 */
 	subscribeEvents() {
-		Store.events.subscribe('change', state => this.render(state.todo) );
-		window.addEventListener('filterTodo', (event) => this.onFilterTodo(event));
+		Store.events.subscribe('change', state => this.render(state.todo));
 	}
 
 	/**
 	 * Отписка от всех событий
 	 */
 	unSubscribeEvents() {
-		Store.events.subscribe('change', state => this.render(state.todo) );
-		window.removeEventListener('filterTodo', (event) => this.onFilterTodo(event));
+		Store.events.unsubscribe('change', state => this.render(state.todo));
 	}
 
 	/**
-	 * Вовзращает найденный по id объект списка дел
-	 * @param {String} id 
-	 * @returns {Object}
+	 * Вовзращает <h2></h2> элемент с текстом
+	 * @returns {HTMLElement}
 	 */
-	findTodoInList(id) {
-		return this.list.filter(item => item.id === id)[0];
-	}
-
-	/**
-	 * Фильтрация списка дел по парметру
-	 * @param {String} filter - может быть all, done, waiting 
-	 */
-	filterTodoList(filter) {
-		Store.dispatch('changeFilter', filter);
-
-		this.render(Store.state.todo);
+	generateMessage() {
+		const message = document.createElement('h2');
+		message.innerHTML = 'Список пуст, добавьте новые задачи!';
+		message.style.color = '#af7eeb';
+		message.style.textAlign = 'center';
+		return message;
 	}
 
 	/**
@@ -125,17 +93,18 @@ export default class TodoListComponent extends HTMLElement {
 
 		const fragment = document.createDocumentFragment();
 
-		// TODO переделать изящнее -->
-		let sortedTodo = this.sortTodoByDate(todo);
-		let sortedAndFilteredTodo = sortedTodo;
-
-		if (Store.state.selectedFilter !== 'all') {
-			sortedAndFilteredTodo = sortedTodo.filter(item => item.status === Store.state.selectedFilter);
+		// TODO сделать более понятным отображение пустого списка
+		if (todo.length === 0) {
+			this.shadowRoot.appendChild(this.generateMessage());
+			return;
 		}
-		
-		// <-- TODO переделать изящнее 
 
-		sortedAndFilteredTodo.map( ({ id, text, date, status }) => {
+		// TODO сделать более понятным сортировку
+		if (this.store.state.selectedFilter !== 'all') {
+			todo = todo.filter(item => item.status === this.store.state.selectedFilter);
+		}
+
+		todo.map( ({ id, text, date, status }) => {
 			const todoItem = document.createElement('todo-item');
 			todoItem.setAttribute('task-id', id);
 			todoItem.setAttribute('text', text);
@@ -146,7 +115,5 @@ export default class TodoListComponent extends HTMLElement {
 
 		this.template.querySelector('ul').appendChild(fragment);
 		this.shadowRoot.appendChild(this.template);
-
-		//setInterval(() => console.log(this.list), 5000);
 	}
 }

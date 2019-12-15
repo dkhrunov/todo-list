@@ -2,7 +2,7 @@ export default function createReducers() {
 	return {
 		addTodo: (payload, state) => ({
 			...state,
-			todo: [ ...state.todo, payload ],
+			todo: [ payload, ...state.todo ],
 		}),
 		removeTodo: (payload, state) => ({
 			...state,

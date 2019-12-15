@@ -22,3 +22,15 @@ export const formatDate = (date) => {
  
 	return dd + '.' + mm + '.' + yy;
 }
+
+/**
+ * Сортирует список дел по дате (от новых к старым)
+ * и возвращает отсортированный массив
+ * @param {Array} todo
+ * @returns {Array}
+ */
+export const sortTodoByDate = (todo) => {
+	if (!todo) { return; }
+
+	return todo.sort((curr, next) => next.date-curr.date);
+}
