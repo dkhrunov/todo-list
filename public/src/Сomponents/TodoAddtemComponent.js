@@ -51,7 +51,7 @@ template.innerHTML = `
 		button:active {
 			background: #af7eeb;
 			color: white;
-			transform: scale(0.8);
+			transform: scale(0.95);
 		}
 	</style>
 	

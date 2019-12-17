@@ -1,5 +1,4 @@
 import TodoItemComponent from './TodoItemComponent.js';
-import { formatDate } from '../Utilities/utilities.js';
 import Store from '../Store/Store.js';
 
 customElements.define('todo-item', TodoItemComponent);
@@ -13,7 +12,7 @@ template.innerHTML = `
 			flex-direction: column;
 			justify-content: center;
 			width: 100%;
-			margin-left: 0;
+			margin: 0;
 			padding-left: 0;
 		}
 	</style>

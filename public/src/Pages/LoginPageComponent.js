@@ -1,3 +1,5 @@
+import Store from '../Store/Store.js';
+
 export default class LoginPageComponent {
 
 	_inputLogin;
@@ -26,6 +28,10 @@ export default class LoginPageComponent {
 	 */
 	get submitBtn() { return this._submitBtn; }
 
+	onDestroy() {
+		this.unSubscribeEvents();
+	}
+
 	/**
 	 * Авторизация и перенаправление после успешной авторизации
 	 * @param {Event} event 
@@ -49,8 +55,9 @@ export default class LoginPageComponent {
 	/**
 	 * Отписка от всех событий
 	 */
+	//TODO отписываться
 	unSubscribeEvents() {
-		this.submitBtn.removeEventListener('click', (event) => this.onSubmit(event));
+		this.submitBtn.removeEventListener('click', aaaaaa => this.render(aaa));
 	}
 
 	/**

@@ -10,8 +10,9 @@ export default class Observer {
 		this.subscribers[event].push(callback);
 	}
 
+	// TODO не работают отписки
 	unsubscribe(event, callback) {
-		this.subscribers[event].pop(callback);
+		this.subscribers[event] = this.subscribers[event].filter(cb => cb !== callback)
 	}
 
 	notify(event, payload) {

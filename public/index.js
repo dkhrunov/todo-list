@@ -14,9 +14,7 @@ const root = document.getElementById('root');
 
 const router = new Router(root);
 
-window.addEventListener('changeRoute', event => {
-	router.changeRoute(event.detail.route);
-});
+window.addEventListener('changeRoute', event =>	router.changeRoute(event.detail.route));
 
 if ( !router.isAuthorization() ) {
 	window.dispatchEvent(new CustomEvent('changeRoute', { detail: { route: 'login' } }));

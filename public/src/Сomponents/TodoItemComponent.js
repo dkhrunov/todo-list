@@ -2,8 +2,6 @@ import Store from '../Store/Store.js';
 import { formatDate } from '../Utilities/utilities.js';
 
 const template = document.createElement('template');
-const statusWaiting = '<i class="fa fa-circle-o status-waiting" aria-hidden="true"></i>';
-const statusDone = '<i class="fa fa-circle status-done" aria-hidden="true"></i>';
 
 template.innerHTML = `
 	<style>
@@ -12,20 +10,12 @@ template.innerHTML = `
 			align-items: center;
 			min-height: 50px;
 			font-size: 1em;
-			margin: 10px;
 			color: #999fc0;
-			transition: 0.3s;
-			border-bottom: 1px solid transparent;
-			cursor: pointer;
+			border-bottom: 2px solid #e3e9ff;
 		}
 
-		li:hover {
-			border-color: #3b064d;
-		}
-
-		input[type=checkbox] {
-			width: 5%;
-			cursor: pointer;
+		li:hover, li:hover input[type=text] {
+			background: #f7f9ff;
 		}
 
 		label {
@@ -49,23 +39,10 @@ template.innerHTML = `
 			margin: 0 15px;
 		}
 
-		.icon-status {
-			font-size: 1.3em;
-			cursor: pointer;
-		}
-
-		.status-done {
-			color: #af7eeb;
-		}
-
-		.status-waiting {
-			color: #999fc0;
-		}
-
 		.remove-item {
 			font-size: 1.3em;
 			cursor: pointer;
-			/*color: red;*/
+			color: red;
 		}
 
 	</style>
@@ -73,8 +50,7 @@ template.innerHTML = `
 	<link rel="stylesheet" href="../style/font-awesome/css/font-awesome.min.css">
 	
 	<li>
-		<input type="checkbox" hidden >
-		<div class="icon-status"></div>
+		<input type="checkbox" >
 		<label><input type="text" ></label>
 		<div class="date"></div>
 		<div class="remove-item"><i class="fa fa-trash-o" aria-hidden="true"></i></div>
@@ -84,7 +60,7 @@ template.innerHTML = `
 export default class TodoItemComponent extends HTMLElement {
 
 	_template;
-	_iconStatus;
+	_checkbox;
 	_textInput;
 	_removeBtn;
 
@@ -101,7 +77,7 @@ export default class TodoItemComponent extends HTMLElement {
 	/**
 	 * @returns {HTMLTemplateElement}
 	 */
-	get iconStatus() { return this._iconStatus; }
+	get checkbox() { return this._checkbox; }
 
 	/**
 	 * @returns {HTMLTemplateElement}
@@ -128,15 +104,9 @@ export default class TodoItemComponent extends HTMLElement {
 	toggleStatus() {
 		if (this.getAttribute('status') === 'waiting') {
 			this.setAttribute('status', 'done');
-			
-			this.textInput.style.textDecoration = 'line-through';
-			this.iconStatus.innerHTML = statusDone;
 		}
 		else if (this.getAttribute('status') === 'done') {
 			this.setAttribute('status', 'waiting');
-
-			this.textInput.style.textDecoration = '';
-			this.iconStatus.innerHTML = statusWaiting;
 		}
 	}
 
@@ -171,7 +141,7 @@ export default class TodoItemComponent extends HTMLElement {
 	 * Оформление подписок событий элемента
 	 */
 	subscribeEvents() {
-		this.iconStatus.addEventListener('click', () => this.onChangeStatus());
+		this.checkbox.addEventListener('click', () => this.onChangeStatus());
 		this.removeBtn.addEventListener('click', () => this.onRemoveItem());
 		this.textInput.addEventListener('change', () => this.onChangeText());
 	}
@@ -180,7 +150,7 @@ export default class TodoItemComponent extends HTMLElement {
 	 * Отписка от всех событий
 	 */
 	unSubscribeEvents() {
-		this.iconStatus.removeEventListener('click', () => this.onChangeStatus());
+		this.checkbox.removeEventListener('click', () => this.onChangeStatus());
 		this.removeBtn.removeEventListener('click', () => this.onRemoveItem());
 		this.textInput.removeEventListener('change', () => this.onChangeText());
 	}
@@ -208,7 +178,7 @@ export default class TodoItemComponent extends HTMLElement {
 			id: this.getAttribute('task-id'),
 			text: this.getAttribute('text'),
 			date: new Date(this.getAttribute('date')),
-			status: this.getAttribute('status')
+			status: this.getAttribute('status'),
 		}
 	}
 
@@ -218,24 +188,20 @@ export default class TodoItemComponent extends HTMLElement {
 	render() {		
 		this._template = template.content.cloneNode(true);
 
-		this._iconStatus = this.template.querySelector('.icon-status');
+		this._checkbox = this.template.querySelector('input[type=checkbox]');
 		this._removeBtn = this.template.querySelector('.remove-item');
 		this._textInput = this.template.querySelector('label input[type=text]');
 
 		this.shadowRoot.innerHTML = '';
 
 		this.template.querySelector('li').setAttribute('task-id', this.getAttribute('task-id'));
-		this.template.querySelector('input[type=checkbox]').setAttribute('name', this.getAttribute('task-id'));
 		this.template.querySelector('label').setAttribute('for', this.getAttribute('task-id'));
 		this.template.querySelector('label input[type=text]').value = this.getAttribute('text');
 		this.template.querySelector('.date').innerText = formatDate(new Date(this.getAttribute('date')));
 
-		/* Отображает определенный индикатор статуса в зависимости от статуса задания */
-		if (this.getAttribute('status') === 'done') {
-			this.template.querySelector('.icon-status').innerHTML = statusDone;
-			this.template.querySelector('label input[type=text]').style.textDecoration = 'line-through';
-		} else {
-			this.template.querySelector('.icon-status').innerHTML = statusWaiting;
+		if (this.getAttribute('status') === 'done') { 
+			this.checkbox.checked = true;
+			this.textInput.style.textDecoration = 'line-through';
 		}
 
 		this.shadowRoot.appendChild(this.template);

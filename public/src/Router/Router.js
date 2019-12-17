@@ -11,12 +11,16 @@ export default class Router {
 		const conf = routerConfig[route];
 
 		if (!conf) return;
+		
+		if (this.component) {
+			this.component.onDestroy();
+		}
 
 		window.history.pushState(conf.data, '', conf.url);
 
-		const component = new conf.component();
+		this.component = new conf.component();
 
-		const DOMElement = component.render();
+		const DOMElement = this.component.render();
 
 		if (this.currentDomComponent) {
 			this.anchor.innerHTML = '';

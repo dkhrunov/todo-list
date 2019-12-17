@@ -24,12 +24,13 @@ body {
 	flex-direction: column;
 	justify-content: center;
 	height: 65px;
-	width: 100%;
+	width: calc(100% - 20px);
 	font-size: 2em;
 	box-shadow: 0px 6px 20px #27272780;
 	background: #af7eeb;
 	color: white;
 	z-index: 999;
+	padding-left: 20px;
 }
 
 .header .app-name{
@@ -71,7 +72,7 @@ body {
 	padding: 0 20px;
 	background: white;
 	border-radius: 10px 10px 0 0;
-	/* margin-bottom: 20px; */
+	border-bottom: 2px solid #e3e9ff;
 }
 
 .content #todo-list {
@@ -94,6 +95,18 @@ create-item {
 
 todo-filter {
 	width: 100%;
+}
+
+header-component {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	height: 100%;
+}
+
+counter-waiting {
+	margin-left: 20px;
+	height: 100%;
 }
 
 /* Стили для scrollbar */
