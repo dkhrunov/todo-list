@@ -1,5 +1,4 @@
 import Store from '../Store/Store.js';
-import { generateRandomNum } from '../Utilities/utilities.js';
 
 const template = document.createElement('template');
 
@@ -103,7 +102,10 @@ export default class TodoAddtemComponent extends HTMLElement {
 	 */
 	onSubmit(event) {
 		if ((event.key === 'Enter' || event.target.tagName === "BUTTON") && this.newItemText.value) {
-			this.dispatchCreateTodo();
+			Api.createTodo(this.getNewTodoData())
+				.then(newTodo => this.dispatchCreateTodo(newTodo))
+				.catch(error => console.error(error));
+			
 			this.clearInput();
 		}
 	}
@@ -137,8 +139,8 @@ export default class TodoAddtemComponent extends HTMLElement {
 	/**
 	 * Вызывает событие создания задачи списка дел
 	 */
-	dispatchCreateTodo() {
-		Store.dispatch('addTodo', this.getNewTodoData());
+	dispatchCreateTodo(data) {
+		Store.dispatch('addTodo', data);
 	}
 
 	/**
@@ -147,10 +149,9 @@ export default class TodoAddtemComponent extends HTMLElement {
 	 */
 	getNewTodoData() {
 		return {
-			id: generateRandomNum(),
 			text: this.newItemText.value,
-			date: new Date(),
-			status: 'waiting'
+			createDate: new Date(),
+			completed: false,
 		}
 	}
 

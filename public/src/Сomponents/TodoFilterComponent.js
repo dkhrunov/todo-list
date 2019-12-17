@@ -27,8 +27,8 @@ template.innerHTML = `
 	</style>
 	<div class="todo-filter">
 		<div class="todo-filter_active" filter="all">Все</div>
-		<div filter="done">Завершенные</div>
-		<div filter="waiting">Незавершенные</div>
+		<div filter="true">Завершенные</div>
+		<div filter="false">Незавершенные</div>
 	</div>
 `;
 

@@ -1,22 +1,22 @@
-import Store from '../Store/Store.js';
-
 export default class LoginPageComponent {
 
-	_inputLogin;
+	_inputEmail;
 	_inputPassword;
 	_submitBtn;
+	_api;
 
 	constructor() {
 		this.fragment = document.createDocumentFragment();
-		this._inputLogin = document.createElement('input');
+		this._inputEmail = document.createElement('input');
 		this._inputPassword = document.createElement('input');
 		this._submitBtn = document.createElement('button');
+		this._api = window.Api;
 	}
 
 	/**
 	 * @returns {HTMLTemplateElement}
 	 */
-	get inputLogin() { return this._inputLogin; }
+	get inputEmail() { return this._inputEmail; }
 
 	/**
 	 * @returns {HTMLTemplateElement}
@@ -28,6 +28,12 @@ export default class LoginPageComponent {
 	 */
 	get submitBtn() { return this._submitBtn; }
 
+	/**
+	 * @returns {TodoApi}
+	 */
+	get api() { return this._api; }
+
+	//TODO где-то уничтожать объект
 	onDestroy() {
 		this.unSubscribeEvents();
 	}
@@ -36,12 +42,16 @@ export default class LoginPageComponent {
 	 * Авторизация и перенаправление после успешной авторизации
 	 * @param {Event} event 
 	 */
+	//TODO toast
 	onSubmit(event) {
-		// TODO добавить авторизацию
-		//if (this.inputLogin.value == 'admin' && this.inputPassword.value == 'admin') {
-			window.localStorage.setItem('auth_token', 'ea135929105c4f29a0f5117d2960926f');
-			window.dispatchEvent(new CustomEvent('changeRoute', { detail: { route: 'todolist' } }));
-		//}
+		this.api.login({ email: this.inputEmail.value, password: this.inputPassword.value })
+			.then(res => {
+				window.localStorage.setItem('auth_token', res.token);
+				window.localStorage.setItem('userId', res.id);
+				window.dispatchEvent(new CustomEvent('changeRoute', { detail: { route: 'todolist' } }));
+			})
+			.catch(error => console.error(error))
+
 		event.preventDefault();
 	}
 
@@ -55,7 +65,6 @@ export default class LoginPageComponent {
 	/**
 	 * Отписка от всех событий
 	 */
-	//TODO отписываться
 	unSubscribeEvents() {
 		this.submitBtn.removeEventListener('click', aaaaaa => this.render(aaa));
 	}
@@ -80,10 +89,10 @@ export default class LoginPageComponent {
 		loginBoxElement.classList.add('inputBox');
 		formElement.appendChild(loginBoxElement);
 
-		this.inputLogin.classList.add('input');
-		this.inputLogin.setAttribute('type', 'text');
-		this.inputLogin.setAttribute('placeholder', 'Login');
-		loginBoxElement.appendChild(this.inputLogin);
+		this.inputEmail.classList.add('input');
+		this.inputEmail.setAttribute('type', 'text');
+		this.inputEmail.setAttribute('placeholder', 'Email');
+		loginBoxElement.appendChild(this.inputEmail);
 		
 		const passwordBoxElement = document.createElement('div');
 		passwordBoxElement.classList.add('inputBox');

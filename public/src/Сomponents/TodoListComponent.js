@@ -1,5 +1,6 @@
 import TodoItemComponent from './TodoItemComponent.js';
 import Store from '../Store/Store.js';
+import { parseStringToBoolean } from '../Utilities/utilities.js';
 
 customElements.define('todo-item', TodoItemComponent);
 
@@ -28,7 +29,6 @@ export default class TodoListComponent extends HTMLElement {
 	constructor() {
 		super();
 		this.attachShadow({mode: "open"});
-		this.store = Store;
 	}
 
 	/**
@@ -37,6 +37,10 @@ export default class TodoListComponent extends HTMLElement {
 	get template() { return this._template; }
 
 	connectedCallback() {
+		Api.getAllTodo()
+			.then(res => Store.dispatch('setTodos', res))
+			.catch(error => console.error(error));
+
 		this.render(Store.state.todo);
 		this.subscribeEvents();
 	}
@@ -99,16 +103,16 @@ export default class TodoListComponent extends HTMLElement {
 		}
 
 		// TODO сделать более понятным сортировку
-		if (this.store.state.selectedFilter !== 'all') {
-			todo = todo.filter(item => item.status === this.store.state.selectedFilter);
+		if (Store.state.selectedFilter !== 'all') {
+			todo = todo.filter(item => item.completed === parseStringToBoolean(Store.state.selectedFilter));
 		}
 
-		todo.map( ({ id, text, date, status }) => {
+		todo.map( ({ _id, text, createDate, completed }) => {
 			const todoItem = document.createElement('todo-item');
-			todoItem.setAttribute('task-id', id);
+			todoItem.setAttribute('task-id', _id);
 			todoItem.setAttribute('text', text);
-			todoItem.setAttribute('date', date);
-			todoItem.setAttribute('status', status);
+			todoItem.setAttribute('createDate', createDate);
+			todoItem.setAttribute('completed', completed);
 			fragment.appendChild(todoItem);
 		});
 

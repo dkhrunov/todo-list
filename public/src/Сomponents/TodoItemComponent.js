@@ -1,5 +1,5 @@
 import Store from '../Store/Store.js';
-import { formatDate } from '../Utilities/utilities.js';
+import { formatDate, parseStringToBoolean } from '../Utilities/utilities.js';
 
 const template = document.createElement('template');
 
@@ -12,6 +12,10 @@ template.innerHTML = `
 			font-size: 1em;
 			color: #999fc0;
 			border-bottom: 2px solid #e3e9ff;
+		}
+
+		input[type=checkbox] {
+			cursor: pointer;
 		}
 
 		li:hover, li:hover input[type=text] {
@@ -104,11 +108,11 @@ export default class TodoItemComponent extends HTMLElement {
 	 * Изменяет атрибут статуса задания и меняет его UI
 	 */
 	toggleStatus() {
-		if (this.getAttribute('status') === 'waiting') {
-			this.setAttribute('status', 'done');
+		if (this.getAttribute('completed') === 'true') {
+			this.setAttribute('completed', 'false');
 		}
-		else if (this.getAttribute('status') === 'done') {
-			this.setAttribute('status', 'waiting');
+		else if (this.getAttribute('completed') === 'false') {
+			this.setAttribute('completed', 'true');
 		}
 	}
 
@@ -117,6 +121,11 @@ export default class TodoItemComponent extends HTMLElement {
 	 */
 	onChangeStatus() {
 		this.toggleStatus();
+		let data = this.getTodoData();
+
+		Api.updateTodo(data._id, data)
+			.catch(error => console.error(error));
+
 		this.dispatchEditTodo();
 	}
 
@@ -124,6 +133,9 @@ export default class TodoItemComponent extends HTMLElement {
 	 * Удаляет задание из общего списка
 	 */
 	onRemoveItem() {
+		Api.deleteTodo(this.getTodoData()._id)
+			.catch(error => console.error(error));
+
 		this.dispatchDeleteTodo();
 	}
 
@@ -135,6 +147,10 @@ export default class TodoItemComponent extends HTMLElement {
 			this.textInput.value = this.getAttribute('text');
 		} else {
 			this.setAttribute('text', this.textInput.value);
+
+			Api.updateTodo(this.getTodoData()._id, this.getTodoData())
+				.catch(error => console.error(error));
+
 			this.dispatchEditTodo();
 		}
 	}
@@ -177,10 +193,10 @@ export default class TodoItemComponent extends HTMLElement {
 	 */
 	getTodoData() {
 		return {
-			id: this.getAttribute('task-id'),
+			_id: this.getAttribute('task-id'),
 			text: this.getAttribute('text'),
-			date: new Date(this.getAttribute('date')),
-			status: this.getAttribute('status'),
+			createDate: new Date(this.getAttribute('createDate')),
+			completed: parseStringToBoolean(this.getAttribute('completed')),
 		}
 	}
 
@@ -199,9 +215,9 @@ export default class TodoItemComponent extends HTMLElement {
 		this.template.querySelector('li').setAttribute('task-id', this.getAttribute('task-id'));
 		this.template.querySelector('label').setAttribute('for', this.getAttribute('task-id'));
 		this.template.querySelector('label input[type=text]').value = this.getAttribute('text');
-		this.template.querySelector('.date').innerText = formatDate(new Date(this.getAttribute('date')));
+		this.template.querySelector('.date').innerText = formatDate(new Date(this.getAttribute('createDate')));
 
-		if (this.getAttribute('status') === 'done') { 
+		if (this.getAttribute('completed') === 'true') { 
 			this.checkbox.checked = true;
 			this.textInput.style.textDecoration = 'line-through';
 		}

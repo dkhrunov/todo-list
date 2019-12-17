@@ -4,6 +4,9 @@ import TodoAddtemComponent from './src/Сomponents/TodoAddtemComponent.js';
 import TodoFilterComponent from './src/Сomponents/TodoFilterComponent.js';
 import Router from './src/Router/Router.js';
 import Store from './src/Store/Store.js';
+import ApiTodo from './src/Api/TodoApi.js';
+
+window.Api = ApiTodo;
 
 customElements.define('header-component', HeaderComponent);
 customElements.define('create-item', TodoAddtemComponent);
@@ -19,7 +22,6 @@ window.addEventListener('changeRoute', event =>	router.changeRoute(event.detail.
 if ( !router.isAuthorization() ) {
 	window.dispatchEvent(new CustomEvent('changeRoute', { detail: { route: 'login' } }));
 } else {
+	window.Store = Store;
 	window.dispatchEvent(new CustomEvent('changeRoute', { detail: { route: 'todolist' } }));
 }
-
-window.Store = Store;

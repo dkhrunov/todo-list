@@ -72,7 +72,7 @@ class CounterDoneTask extends CounterComponent {
 		this._template = template.content.cloneNode(true);
 		this.shadowRoot.innerHTML = '';
 
-		let amount = Store.state.todo.filter(item => item.status === 'done').length;
+		let amount = Store.state.todo.filter(item => item.completed === true).length;
 
 		this.template.querySelector('span').innerText = 'Завершенные';
 		this.template.querySelector('.counter').innerText = amount;
@@ -94,7 +94,7 @@ class CounterWaitingTask extends CounterComponent {
 		this._template = template.content.cloneNode(true);
 		this.shadowRoot.innerHTML = '';
 
-		let amount = Store.state.todo.filter(item => item.status === 'waiting').length;
+		let amount = Store.state.todo.filter(item => item.completed === false).length;
 
 		this.template.querySelector('span').innerText = 'Незавершенные';
 		this.template.querySelector('.counter').innerText = amount;
