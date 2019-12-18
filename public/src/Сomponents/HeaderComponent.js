@@ -1,4 +1,4 @@
-import CounterComponentFactory from './CounterComponentFactory.js';
+import CounterComponentFactory, { makeCounter } from './CounterComponentFactory.js';
 
 customElements.define('counter-all', new CounterComponentFactory('all'));
 customElements.define('counter-done', new CounterComponentFactory('done'));
@@ -57,19 +57,13 @@ export default class HeaderComponent extends HTMLElement {
 		
 	}
 
-	makeCounter(tag) {
-		const counter = document.createElement(tag);
-		counter.style.height = '100%';
-		return counter;
-	}
-
 	render() {
 		this._template = template.content.cloneNode(true);
 		this.shadowRoot.innerHTML = '';
 
-		this.template.querySelector('.countres').appendChild(this.makeCounter('counter-all'));
-		this.template.querySelector('.countres').appendChild(this.makeCounter('counter-done'));
-		this.template.querySelector('.countres').appendChild(this.makeCounter('counter-waiting'));
+		this.template.querySelector('.countres').appendChild(makeCounter('counter-all'));
+		this.template.querySelector('.countres').appendChild(makeCounter('counter-done'));
+		this.template.querySelector('.countres').appendChild(makeCounter('counter-waiting'));
 		
 		this.shadowRoot.appendChild(this.template);
 	}

@@ -37,10 +37,7 @@ export default class TodoListComponent extends HTMLElement {
 	get template() { return this._template; }
 
 	connectedCallback() {
-		Api.getAllTodo()
-			.then(res => Store.dispatch('setTodos', res))
-			.catch(error => console.error(error));
-
+		this.fetchTodos();
 		this.render(Store.state.todo);
 		this.subscribeEvents();
 	}
@@ -49,37 +46,36 @@ export default class TodoListComponent extends HTMLElement {
 		this.unSubscribeEvents();
 	}
 
-	// TODO РЕАЛИЗОВАТЬ ЭТИ ДВА МЕТОДА -->
-	static get observedAttributes() {
-		return [/* массив имён атрибутов для отслеживания их изменений */];
+	/**
+	 * Получает todo из Api и отсылает их в Store
+	 */
+	fetchTodos() {
+		Api.getAllTodo()
+			.then(res => Store.dispatch('setTodos', res))
+			.catch(error => console.error(error));
 	}
-  
-	attributeChangedCallback(name, oldValue, newValue) {
-		/* вызывается при изменении одного из перечисленных выше атрибутов */
-	}
-	// <-- TODO РЕАЛИЗОВАТЬ ЭТИ ДВА МЕТОДА
 
 	/**
 	 * Оформление подписок событий элемента
 	 */
 	subscribeEvents() {
-		Store.events.subscribe('change', state => this.render(state.todo));
+		Store.events.subscribe('change', storeState => this.render(storeState.todo));
 	}
 
 	/**
 	 * Отписка от всех событий
 	 */
 	unSubscribeEvents() {
-		Store.events.unsubscribe('change', state => this.render(state.todo));
+		Store.events.unsubscribe('change', storeState => this.render(storeState.todo));
 	}
 
 	/**
 	 * Вовзращает <h2></h2> элемент с текстом
 	 * @returns {HTMLElement}
 	 */
-	generateMessage() {
+	generateMessage(text) {
 		const message = document.createElement('h2');
-		message.innerHTML = 'Список пуст, добавьте новые задачи!';
+		message.innerHTML = text;
 		message.style.color = '#af7eeb';
 		message.style.textAlign = 'center';
 		return message;
@@ -95,14 +91,14 @@ export default class TodoListComponent extends HTMLElement {
 		this.shadowRoot.innerHTML = '';
 
 		const fragment = document.createDocumentFragment();
-
-		// TODO сделать более понятным отображение пустого списка
+		
+		// Сообщение для пользователя, что todo list пустой
 		if (todo.length === 0) {
-			this.shadowRoot.appendChild(this.generateMessage());
+			this.shadowRoot.appendChild(this.generateMessage('Список пуст, добавьте новые задачи!'));
 			return;
 		}
 
-		// TODO сделать более понятным сортировку
+		// Фильтрация todo списка
 		if (Store.state.selectedFilter !== 'all') {
 			todo = todo.filter(item => item.completed === parseStringToBoolean(Store.state.selectedFilter));
 		}

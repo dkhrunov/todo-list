@@ -31,12 +31,4 @@ export default class Router {
 
 		this.currentDomComponent  = DOMElement;
 	}
-
-	isAuthorization() {
-		if (window.localStorage.getItem('auth_token') !== null) { return true; }
-		
-		return false;
-	}
-
-
 }

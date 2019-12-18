@@ -102,12 +102,15 @@ export default class TodoAddtemComponent extends HTMLElement {
 	 */
 	onSubmit(event) {
 		if ((event.key === 'Enter' || event.target.tagName === "BUTTON") && this.newItemText.value) {
-			Api.createTodo(this.getNewTodoData())
-				.then(newTodo => this.dispatchCreateTodo(newTodo))
-				.catch(error => console.error(error));
-			
+			this.sendNewTodo();
 			this.clearInput();
 		}
+	}
+
+	sendNewTodo() {
+		Api.createTodo(this.getNewTodoData())
+			.then(newTodo => this.dispatchCreateTodo(newTodo))
+			.catch(error => console.error(error));
 	}
 
 	/**

@@ -1,14 +1,4 @@
 // TODO обработка BAD requests
-// TODO токен хранить в localStorage и брать от туда же
-// TODO пример (email, password, username) => {...} вынести в один объект data
-/* data MUST BE объектом типа:
-	{
-		text: "string",
-		createDate: "string",
-		completed: "boolean",
-	}
-	!! "createDate" при UPDATE не изменит дату !!
-*/
 class TodoApi {
 	constructor(url) {
 		this.url = url;
@@ -72,8 +62,9 @@ class TodoApi {
 		})
 		.then(res => res.json())
 		.then(res => {			
-			if (res.error) { 
-				throw new Error(res.error);
+			if (res.error) {
+				res.isAuthorization = false;
+				return res;
 			} else {
 				res.isAuthorization = true;
 				return res;
@@ -81,6 +72,9 @@ class TodoApi {
 		});
 	}
 
+	/**
+	 * Получить весь список todo
+	 */
 	getAllTodo() {
 		return fetch(this.url + '/todos', {
 			method: 'GET',
@@ -99,6 +93,10 @@ class TodoApi {
 		});
 	}
 
+	/**
+	 * Поиск todo по id
+	 * @param {Number} id
+	 */
 	getTodo(id) {
 		return fetch(this.url + `/todos/${id}`, {
 			method: 'GET',
@@ -117,6 +115,10 @@ class TodoApi {
 		});
 	}
 
+	/**
+	 * Получить весь список todo
+	 * @param {Object} data
+	 */
 	createTodo(data) {
 		return fetch(this.url + '/todos', {
 			method: 'POST',
@@ -136,6 +138,11 @@ class TodoApi {
 		});
 	}
 
+	/**
+	 * Редактирует todo по id
+	 * @param {Number} id 
+	 * @param {Object} data 
+	 */
 	updateTodo(id, data) {
 		return fetch(this.url + `/todos/${id}`, {
 			method: 'PUT',
@@ -155,6 +162,10 @@ class TodoApi {
 		});
 	}
 
+	/**
+	 * Удалить todo из списка
+	 * @param {Number} id
+	 */
 	deleteTodo(id) {
 		return fetch(this.url + `/todos/${id}`, {
 			method: 'DELETE',

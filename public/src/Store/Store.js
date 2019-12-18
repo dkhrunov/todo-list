@@ -2,7 +2,6 @@ import Observer from "./Observer.js";
 import createRedusers from "./Reducers.js";
 import { sortTodoByDate } from "../Utilities/utilities.js";
 
-// TODO избавиться от постоянной сортировки по дате
 class Store {
 	constructor(reducers) {
 		this.reducers = reducers;
@@ -16,7 +15,7 @@ class Store {
 	dispatch(actionType, payload) {
 		if (this.reducers[actionType]) {
 			this.state = this.reducers[actionType](payload, this.state);
-			//sortTodoByDate(this.state.todo);
+			sortTodoByDate(this.state.todo);
 			this.events.notify('change', this.state);
 		}
 	}

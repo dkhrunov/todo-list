@@ -19,9 +19,12 @@ const router = new Router(root);
 
 window.addEventListener('changeRoute', event =>	router.changeRoute(event.detail.route));
 
-if ( !router.isAuthorization() ) {
-	window.dispatchEvent(new CustomEvent('changeRoute', { detail: { route: 'login' } }));
-} else {
-	window.Store = Store;
-	window.dispatchEvent(new CustomEvent('changeRoute', { detail: { route: 'todolist' } }));
-}
+Api.checkAuth()
+	.then(res => {
+		if (res.isAuthorization) {
+			window.Store = Store;
+			window.dispatchEvent(new CustomEvent('changeRoute', { detail: { route: 'todolist' } }));
+		} else {
+			window.dispatchEvent(new CustomEvent('changeRoute', { detail: { route: 'login' } }));
+		}
+	});

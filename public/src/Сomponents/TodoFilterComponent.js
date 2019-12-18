@@ -120,7 +120,7 @@ export default class TodoFilterComponent extends HTMLElement {
 
 	/**
 	 * Фильтрация списка дел по парметру
-	 * @param {String} filter - может быть all, done, waiting 
+	 * @param {String} filter - может быть all, true, false 
 	 */
 	dispatchFilterTodo(filter) {
 		Store.dispatch('changeFilter', filter);		
