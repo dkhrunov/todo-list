@@ -1,17 +1,11 @@
-import HeaderComponent from './src/Сomponents/HeaderComponent.js';
-import TodoListComponent from './src/Сomponents/TodoListComponent.js';
-import TodoAddtemComponent from './src/Сomponents/TodoAddtemComponent.js';
-import TodoFilterComponent from './src/Сomponents/TodoFilterComponent.js';
+import initCustomElements from './src/initCustomElements.js/index.js';
 import Router from './src/Router/Router.js';
 import Store from './src/Store/Store.js';
 import ApiTodo from './src/Api/TodoApi.js';
 
 window.Api = ApiTodo;
 
-customElements.define('header-component', HeaderComponent);
-customElements.define('create-item', TodoAddtemComponent);
-customElements.define('todo-list', TodoListComponent);
-customElements.define('todo-filter', TodoFilterComponent);
+initCustomElements();
 
 const root = document.getElementById('root');
 

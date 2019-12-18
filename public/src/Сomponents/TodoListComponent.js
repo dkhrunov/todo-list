@@ -1,8 +1,5 @@
-import TodoItemComponent from './TodoItemComponent.js';
 import Store from '../Store/Store.js';
 import { parseStringToBoolean } from '../Utilities/utilities.js';
-
-customElements.define('todo-item', TodoItemComponent);
 
 const template = document.createElement('template');
 

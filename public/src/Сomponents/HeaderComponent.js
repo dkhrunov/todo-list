@@ -1,8 +1,4 @@
-import CounterComponentFactory, { makeCounter } from './CounterComponentFactory.js';
-
-customElements.define('counter-all', new CounterComponentFactory('all'));
-customElements.define('counter-done', new CounterComponentFactory('done'));
-customElements.define('counter-waiting', new CounterComponentFactory('waiting'));
+import { makeCounter } from './CounterComponentFactory.js';
 
 const template = document.createElement('template');
 
