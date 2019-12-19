@@ -1,7 +1,7 @@
 const express = require('express');
 const app = express();
 const path = require('path');
-const port = 3000;
+const port = process.env.PORT || 8000;
 
 /**
  * Путь для статических файлов
@@ -30,6 +30,7 @@ app.use((error, req, res, next) => {
 	console.log(error)
 	res.status(500).send('Something broke!')
 })
+
 
 app.listen(port, (error) => {
 	if (error) {
