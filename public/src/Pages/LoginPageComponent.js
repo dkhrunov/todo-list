@@ -33,7 +33,6 @@ export default class LoginPageComponent {
 	 */
 	get api() { return this._api; }
 
-	//TODO уничтожать объект при смене роутера
 	onDestroy() {
 		this.unSubscribeEvents();
 	}
@@ -90,8 +89,8 @@ export default class LoginPageComponent {
 		formElement.appendChild(loginBoxElement);
 
 		this.inputEmail.classList.add('input');
-		this.inputEmail.setAttribute('type', 'text');
-		this.inputEmail.setAttribute('placeholder', 'Email');
+		this.inputEmail.setAttribute('type', 'email');
+		this.inputEmail.setAttribute('placeholder', 'Email address');
 		loginBoxElement.appendChild(this.inputEmail);
 		
 		const passwordBoxElement = document.createElement('div');

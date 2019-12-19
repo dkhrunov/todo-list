@@ -1,4 +1,5 @@
 import routerConfig from './routerConfig.js';
+import Store from '../Store/Store.js';
 
 export default class Router {
 	constructor(anchor){
@@ -14,6 +15,10 @@ export default class Router {
 		
 		if (this.component) {
 			this.component.onDestroy();
+		}
+
+		if (route === 'todolist') {
+			window.Store = Store;
 		}
 
 		window.history.pushState(conf.data, '', conf.url);

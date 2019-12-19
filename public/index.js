@@ -1,6 +1,5 @@
 import initCustomElements from './src/initCustomElements.js';
 import Router from './src/Router/Router.js';
-import Store from './src/Store/Store.js';
 import ApiTodo from './src/Api/TodoApi.js';
 
 toastr.options = {
@@ -34,7 +33,6 @@ window.addEventListener('changeRoute', event =>	router.changeRoute(event.detail.
 Api.checkAuth()
 	.then(res => {
 		if (res.isAuthorization) {
-			window.Store = Store;
 			window.dispatchEvent(new CustomEvent('changeRoute', { detail: { route: 'todolist' } }));
 		} else {
 			window.dispatchEvent(new CustomEvent('changeRoute', { detail: { route: 'login' } }));
