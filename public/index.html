@@ -7,12 +7,19 @@
 
 	<link rel="stylesheet" href="./style/index.css">
 	<link rel="stylesheet" href="./style/loginPageStyle.css">
+	<link rel="stylesheet" href="./style/todoListPageStyle.css">
+
+	<link rel="stylesheet" href="./extension/toastr/toastr.min.css">
 
 	<title>Todo App</title>
 </head>
 <body>
 	<div id="root"></div>
 	
+	<!-- Jquery только используется в toastr -->
+	<script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+	<script type="module" src="./extension/toastr/toastr.min.js"></script>
+
 	<script type="module" src="index.js"></script>
 </body>
 </html>

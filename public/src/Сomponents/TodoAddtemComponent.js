@@ -103,14 +103,20 @@ export default class TodoAddtemComponent extends HTMLElement {
 	onSubmit(event) {
 		if ((event.key === 'Enter' || event.target.tagName === "BUTTON") && this.newItemText.value) {
 			this.sendNewTodo();
-			this.clearInput();
 		}
 	}
 
+	/**
+	 * Делает запрос на бек с добавлением нового todo 
+	 * и добавляет его в Store
+	 */
 	sendNewTodo() {
 		Api.createTodo(this.getNewTodoData())
-			.then(newTodo => this.dispatchCreateTodo(newTodo))
-			.catch(error => console.error(error));
+			.then(newTodo => {
+				this.dispatchCreateTodo(newTodo);
+				this.clearInput();
+			})
+			.catch(error => toastr.error(error));
 	}
 
 	/**

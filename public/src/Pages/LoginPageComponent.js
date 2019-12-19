@@ -33,7 +33,7 @@ export default class LoginPageComponent {
 	 */
 	get api() { return this._api; }
 
-	//TODO где-то уничтожать объект
+	//TODO уничтожать объект при смене роутера
 	onDestroy() {
 		this.unSubscribeEvents();
 	}
@@ -42,15 +42,15 @@ export default class LoginPageComponent {
 	 * Авторизация и перенаправление после успешной авторизации
 	 * @param {Event} event 
 	 */
-	//TODO toast
 	onSubmit(event) {
 		this.api.login({ email: this.inputEmail.value, password: this.inputPassword.value })
 			.then(res => {
 				window.localStorage.setItem('auth_token', res.token);
 				window.localStorage.setItem('userId', res.id);
+				toastr.success('Welcome back!');
 				window.dispatchEvent(new CustomEvent('changeRoute', { detail: { route: 'todolist' } }));
 			})
-			.catch(error => console.error(error))
+			.catch(error => toastr.error(error))
 
 		event.preventDefault();
 	}

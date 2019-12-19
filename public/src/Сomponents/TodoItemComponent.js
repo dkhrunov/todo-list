@@ -124,9 +124,8 @@ export default class TodoItemComponent extends HTMLElement {
 		let data = this.getTodoData();
 
 		Api.updateTodo(data._id, data)
+			.then(this.dispatchEditTodo())
 			.catch(error => console.error(error));
-
-		this.dispatchEditTodo();
 	}
 
 	/**
@@ -134,25 +133,27 @@ export default class TodoItemComponent extends HTMLElement {
 	 */
 	onRemoveItem() {
 		Api.deleteTodo(this.getTodoData()._id)
-			.catch(error => console.error(error));
-
-		this.dispatchDeleteTodo();
+			.then(this.dispatchDeleteTodo())
+			.catch(error => toastr.error(error))
 	}
 
 	/**
-	 * Изменяет текст задания
+	 * Изменяет текст задания при потере фокуса
 	 */
 	onChangeText() {
-		if (this.textInput.value == '') {
-			this.textInput.value = this.getAttribute('text');
-		} else {
-			this.setAttribute('text', this.textInput.value);
+		Api.updateTodo(this.getTodoData()._id, this.getTodoData())
+			.then(this.dispatchEditTodo())
+			.catch(error => {
+				toastr.error(error);
+				this.textInput.focus();
+			})
+	}
 
-			Api.updateTodo(this.getTodoData()._id, this.getTodoData())
-				.catch(error => console.error(error));
-
-			this.dispatchEditTodo();
-		}
+	/**
+	 * Применяет новый текст в атрибут text 
+	 */
+	onInputText() {
+		this.setAttribute('text', this.textInput.value);
 	}
 
 	/**
@@ -162,6 +163,7 @@ export default class TodoItemComponent extends HTMLElement {
 		this.checkbox.addEventListener('click', () => this.onChangeStatus());
 		this.removeBtn.addEventListener('click', () => this.onRemoveItem());
 		this.textInput.addEventListener('change', () => this.onChangeText());
+		this.textInput.addEventListener('input', () => this.onInputText());
 	}
 
 	/**
@@ -171,6 +173,7 @@ export default class TodoItemComponent extends HTMLElement {
 		this.checkbox.removeEventListener('click', () => this.onChangeStatus());
 		this.removeBtn.removeEventListener('click', () => this.onRemoveItem());
 		this.textInput.removeEventListener('change', () => this.onChangeText());
+		this.textInput.removeEventListener('input', () => this.onInputText());
 	}
 
 	/**

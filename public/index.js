@@ -1,7 +1,25 @@
-import initCustomElements from './src/initCustomElements.js/index.js';
+import initCustomElements from './src/initCustomElements.js';
 import Router from './src/Router/Router.js';
 import Store from './src/Store/Store.js';
 import ApiTodo from './src/Api/TodoApi.js';
+
+toastr.options = {
+	"closeButton": true,
+	"debug": false,
+	"newestOnTop": true,
+	"progressBar": false,
+	"positionClass": "toast-bottom-right",
+	"preventDuplicates": false,
+	"onclick": null,
+	"showDuration": "300",
+	"hideDuration": "300",
+	"timeOut": "2000",
+	"extendedTimeOut": "1000",
+	"showEasing": "swing",
+	"hideEasing": "linear",
+	"showMethod": "fadeIn",
+	"hideMethod": "fadeOut"
+}
 
 window.Api = ApiTodo;
 

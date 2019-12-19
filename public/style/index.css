@@ -50,65 +50,6 @@ body {
 	background: #e3e9ff;
 }
 
-.content #create-item {
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	width: 80%;
-	height: 5%;
-	padding: 20px;
-	background: white;
-	border-radius: 10px;
-	margin-bottom: 20px;
-}
-
-
-.content #todo-filter {
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	width: 80%;
-	height: 5%;
-	padding: 0 20px;
-	background: white;
-	border-radius: 10px 10px 0 0;
-	/* border-bottom: 2px solid #e3e9ff; */
-}
-
-.content #todo-list {
-	width: 80%;
-	height: 65%;
-	padding: 0 20px 20px 20px;
-	overflow-x: hidden;
-	overflow-y: auto;
-	background: white;
-	border-radius: 0 0 10px 10px ;
-}
-
-/* Custom tags */
-create-item {
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	width: 100%;
-}
-
-todo-filter {
-	width: 100%;
-}
-
-header-component {
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-	height: 100%;
-}
-
-counter-waiting {
-	margin-left: 20px;
-	height: 100%;
-}
-
 /* Стили для scrollbar */
 ::-webkit-scrollbar {
 	width: 10px;

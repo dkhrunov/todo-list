@@ -1,4 +1,3 @@
-// TODO обработка BAD requests
 class TodoApi {
 	constructor(url) {
 		this.url = url;

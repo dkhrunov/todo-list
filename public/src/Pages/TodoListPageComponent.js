@@ -1,4 +1,3 @@
-// TODO разбить логику render
 export default class TodoListPageComponent {
 	constructor() {
 		this.fragment = document.createDocumentFragment();
