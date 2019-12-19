@@ -115,6 +115,7 @@ export default class TodoAddtemComponent extends HTMLElement {
 			.then(newTodo => {
 				this.dispatchCreateTodo(newTodo);
 				this.clearInput();
+				toastr.success(`Задача успешно добавлена.`)
 			})
 			.catch(error => toastr.error(error));
 	}
