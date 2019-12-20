@@ -1,4 +1,5 @@
 import Store from '../Store/Store.js';
+import { addTodo } from '../Store/Actions.js';
 import { parseStringToBoolean } from '../Utilities/utilities.js';
 
 const template = document.createElement('template');
@@ -48,7 +49,7 @@ export default class TodoListComponent extends HTMLElement {
 	 */
 	fetchTodos() {
 		Api.getAllTodo()
-			.then(res => Store.dispatch('setTodos', res))
+			.then(res => Store.dispatch(addTodo(res)))
 			.catch(error => console.error(error));
 	}
 
@@ -56,14 +57,14 @@ export default class TodoListComponent extends HTMLElement {
 	 * Оформление подписок событий элемента
 	 */
 	subscribeEvents() {
-		Store.events.subscribe('change', storeState => this.render(storeState.todo));
+		Store.subscribe('change', storeState => this.render(storeState.todo));
 	}
 
 	/**
 	 * Отписка от всех событий
 	 */
 	unSubscribeEvents() {
-		Store.events.unsubscribe('change', storeState => this.render(storeState.todo));
+		Store.unsubscribe('change', storeState => this.render(storeState.todo));
 	}
 
 	/**

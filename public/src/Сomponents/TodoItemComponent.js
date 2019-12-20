@@ -1,4 +1,5 @@
 import Store from '../Store/Store.js';
+import { editTodo, deleteTodo } from '../Store/Actions.js';
 import { formatDate, parseStringToBoolean } from '../Utilities/utilities.js';
 
 const template = document.createElement('template');
@@ -124,7 +125,9 @@ export default class TodoItemComponent extends HTMLElement {
 		let data = this.getTodoData();
 
 		Api.updateTodo(data._id, data)
-			.then(this.dispatchEditTodo())
+			.then(updatedTodo => {
+				this.dispatchEditTodo(updatedTodo);
+			})
 			.catch(error => console.error(error));
 	}
 
@@ -141,8 +144,12 @@ export default class TodoItemComponent extends HTMLElement {
 	 * Изменяет текст задания при потере фокуса
 	 */
 	onChangeText() {
-		Api.updateTodo(this.getTodoData()._id, this.getTodoData())
-			.then(this.dispatchEditTodo())
+		let data = this.getTodoData();
+
+		Api.updateTodo(data._id, data)
+			.then(updatedTodo => {
+				this.dispatchEditTodo(updatedTodo);
+			})
 			.catch(error => {
 				toastr.error(error);
 				this.textInput.focus();
@@ -178,16 +185,17 @@ export default class TodoItemComponent extends HTMLElement {
 
 	/**
 	 * Вызывает событие изменения задачи из списка дел
+	 * @param {Object} data - обект с данными todo задачи
 	 */
-	dispatchEditTodo() {
-		Store.dispatch('editTodo', this.getTodoData());
+	dispatchEditTodo(data) {
+		Store.dispatch(editTodo(data));
 	}
 
 	/**
 	 * Вызывает событие удаления задачи из списка дел
 	 */
 	dispatchDeleteTodo() {
-		Store.dispatch('removeTodo', this.getTodoData());
+		Store.dispatch(deleteTodo(this.getTodoData()));
 	}
 
 	/**

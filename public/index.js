@@ -1,6 +1,7 @@
 import initCustomElements from './src/initCustomElements.js';
 import Router from './src/Router/Router.js';
 import ApiTodo from './src/Api/TodoApi.js';
+import { addTodo, editTodo, deleteTodo } from './src/Store/Actions.js';
 
 toastr.options = {
 	"closeButton": true,
@@ -21,6 +22,7 @@ toastr.options = {
 }
 
 window.Api = ApiTodo;
+window.Commands = { addTodo, editTodo, deleteTodo };
 
 initCustomElements();
 
