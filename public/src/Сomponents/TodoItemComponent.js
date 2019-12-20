@@ -1,6 +1,7 @@
 import Store from '../Store/Store.js';
 import { editTodo, deleteTodo } from '../Store/Actions.js';
 import { formatDate, parseStringToBoolean } from '../Utilities/utilities.js';
+import ApiTodo from '../Api/TodoApi.js';
 
 const template = document.createElement('template');
 
@@ -124,7 +125,7 @@ export default class TodoItemComponent extends HTMLElement {
 		this.toggleStatus();
 		let data = this.getTodoData();
 
-		Api.updateTodo(data._id, data)
+		ApiTodo.updateTodo(data._id, data)
 			.then(updatedTodo => {
 				this.dispatchEditTodo(updatedTodo);
 			})
@@ -135,7 +136,7 @@ export default class TodoItemComponent extends HTMLElement {
 	 * Удаляет задание из общего списка
 	 */
 	onRemoveItem() {
-		Api.deleteTodo(this.getTodoData()._id)
+		ApiTodo.deleteTodo(this.getTodoData()._id)
 			.then(this.dispatchDeleteTodo())
 			.catch(error => toastr.error(error))
 	}
@@ -146,7 +147,9 @@ export default class TodoItemComponent extends HTMLElement {
 	onChangeText() {
 		let data = this.getTodoData();
 
-		Api.updateTodo(data._id, data)
+		if (this.textInput.value == '') { toastr.error('Error: Text should be at least 5 characters') }
+
+		ApiTodo.updateTodo(data._id, data)
 			.then(updatedTodo => {
 				this.dispatchEditTodo(updatedTodo);
 			})

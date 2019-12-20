@@ -1,16 +1,16 @@
+import ApiTodo from '../Api/TodoApi.js';
+
 export default class LoginPageComponent {
 
 	_inputEmail;
 	_inputPassword;
 	_submitBtn;
-	_api;
 
 	constructor() {
 		this.fragment = document.createDocumentFragment();
 		this._inputEmail = document.createElement('input');
 		this._inputPassword = document.createElement('input');
 		this._submitBtn = document.createElement('button');
-		this._api = window.Api;
 	}
 
 	/**
@@ -28,11 +28,6 @@ export default class LoginPageComponent {
 	 */
 	get submitBtn() { return this._submitBtn; }
 
-	/**
-	 * @returns {TodoApi}
-	 */
-	get api() { return this._api; }
-
 	onDestroy() {
 		this.unSubscribeEvents();
 	}
@@ -42,7 +37,7 @@ export default class LoginPageComponent {
 	 * @param {Event} event 
 	 */
 	onSubmit(event) {
-		this.api.login({ email: this.inputEmail.value, password: this.inputPassword.value })
+		ApiTodo.login({ email: this.inputEmail.value, password: this.inputPassword.value })
 			.then(res => {
 				window.localStorage.setItem('auth_token', res.token);
 				window.localStorage.setItem('userId', res.id);

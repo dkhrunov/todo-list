@@ -17,10 +17,6 @@ export default class Router {
 			this.component.onDestroy();
 		}
 
-		if (route === 'todolist') {
-			window.Store = Store;
-		}
-
 		window.history.pushState(conf.data, '', conf.url);
 
 		this.component = new conf.component();

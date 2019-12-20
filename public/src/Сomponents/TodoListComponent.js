@@ -1,6 +1,7 @@
 import Store from '../Store/Store.js';
 import { addTodo } from '../Store/Actions.js';
 import { parseStringToBoolean } from '../Utilities/utilities.js';
+import ApiTodo from '../Api/TodoApi.js';
 
 const template = document.createElement('template');
 
@@ -48,7 +49,7 @@ export default class TodoListComponent extends HTMLElement {
 	 * Получает todo из Api и отсылает их в Store
 	 */
 	fetchTodos() {
-		Api.getAllTodo()
+		ApiTodo.getAllTodo()
 			.then(res => Store.dispatch(addTodo(res)))
 			.catch(error => console.error(error));
 	}

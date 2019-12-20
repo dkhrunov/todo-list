@@ -1,5 +1,6 @@
 import Store from '../Store/Store.js';
 import { addTodo } from '../Store/Actions.js';
+import ApiTodo from '../Api/TodoApi.js';
 
 const template = document.createElement('template');
 
@@ -112,7 +113,7 @@ export default class TodoAddtemComponent extends HTMLElement {
 	 * и добавляет его в Store
 	 */
 	sendNewTodo() {
-		Api.createTodo(this.getNewTodoData())
+		ApiTodo.createTodo(this.getNewTodoData())
 			.then(newTodo => {
 				this.dispatchCreateTodo(newTodo);
 				this.clearInput();
