@@ -1,7 +1,6 @@
 import initCustomElements from './src/initCustomElements.js';
 import Router from './src/Router/Router.js';
 import ApiTodo from './src/Api/TodoApi.js';
-import { addTodo, editTodo, deleteTodo } from './src/Store/Actions.js';
 
 toastr.options = {
 	"closeButton": true,
@@ -21,9 +20,6 @@ toastr.options = {
 	"hideMethod": "fadeOut"
 }
 
-window.Api = ApiTodo;
-window.Commands = { addTodo, editTodo, deleteTodo };
-
 initCustomElements();
 
 const root = document.getElementById('root');
@@ -32,7 +28,7 @@ const router = new Router(root);
 
 window.addEventListener('changeRoute', event =>	router.changeRoute(event.detail.route));
 
-Api.checkAuth()
+ApiTodo.checkAuth()
 	.then(res => {
 		if (res.isAuthorization) {
 			window.dispatchEvent(new CustomEvent('changeRoute', { detail: { route: 'todolist' } }));
