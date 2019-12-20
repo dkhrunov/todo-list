@@ -1,24 +1,35 @@
-import Observer from "./Observer.js";
-import createRedusers from "./Reducers.js";
+import SubscribersObserver from "./SubscribersObserver.js";
+import todoReducers from "./Reducers.js";
 import { sortTodoByDate } from "../Utilities/utilities.js";
 
 class Store {
-	constructor(reducers) {
-		this.reducers = reducers;
-		this.state = {
-			todo: [],
-			selectedFilter: 'all',
-		}
-		this.events = new Observer();
+
+	_state;
+	_reducers;
+
+	constructor(reducers, initialState) {
+		this._reducers = reducers;
+		this._state = !!initialState ? initialState : {};
+		this.subscribersObserver = new SubscribersObserver();
 	}
 
-	dispatch(actionType, payload) {
-		if (this.reducers[actionType]) {
-			this.state = this.reducers[actionType](payload, this.state);
-			sortTodoByDate(this.state.todo);
-			this.events.notify('change', this.state);
-		}
+	get state() {
+		return JSON.parse(JSON.stringify(this._state));
+	}
+
+	get reducers() {
+		return this._reducers;
+	}
+
+	dispatch(action) {
+		this._state = this.reducers(this._state, action);
+		sortTodoByDate(this._state.todo);
+		this.subscribersObserver.notify('change', this._state);
+	}
+
+	subscribe(event, callback) {
+		this.subscribersObserver.subscribe(event, callback);
 	}
 }
 
-export default new Store(createRedusers());
+export default new Store(todoReducers, { todo: [], selectedFilter: "all"});

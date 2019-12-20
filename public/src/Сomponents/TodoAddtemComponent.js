@@ -1,4 +1,5 @@
 import Store from '../Store/Store.js';
+import { addTodo } from '../Store/Actions.js';
 
 const template = document.createElement('template');
 
@@ -150,7 +151,7 @@ export default class TodoAddtemComponent extends HTMLElement {
 	 * Вызывает событие создания задачи списка дел
 	 */
 	dispatchCreateTodo(data) {
-		Store.dispatch('addTodo', data);
+		Store.dispatch(addTodo(data));
 	}
 
 	/**

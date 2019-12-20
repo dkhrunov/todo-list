@@ -79,14 +79,14 @@ export default class CounterComponent extends HTMLElement {
 	 * Оформление подписок событий элемента
 	 */
 	subscribeEvents() {
-		Store.events.subscribe('change', () => this.render());
+		Store.subscribe('change', () => this.render());
 	}
 
 	/**
 	 * Отписка от всех событий
 	 */
 	unSubscribeEvents() {
-		Store.events.unsubscribe('change', () => this.render());
+		Store.unsubscribe('change', () => this.render());
 	}
 
 	/**

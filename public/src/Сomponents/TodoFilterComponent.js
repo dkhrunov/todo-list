@@ -1,3 +1,6 @@
+import Store from '../Store/Store.js';
+import { changeFilter } from '../Store/Actions.js';
+
 const template = document.createElement('template');
 
 template.innerHTML = `
@@ -123,7 +126,7 @@ export default class TodoFilterComponent extends HTMLElement {
 	 * @param {String} filter - может быть all, true, false 
 	 */
 	dispatchFilterTodo(filter) {
-		Store.dispatch('changeFilter', filter);		
+		Store.dispatch(changeFilter(filter));		
 	}
 
 	/**
