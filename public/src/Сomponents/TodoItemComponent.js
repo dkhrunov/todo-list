@@ -146,6 +146,8 @@ export default class TodoItemComponent extends HTMLElement {
 	onChangeText() {
 		let data = this.getTodoData();
 
+		if (this.textInput.value == '') { toastr.error('Error: Text should be at least 5 characters') }
+
 		Api.updateTodo(data._id, data)
 			.then(updatedTodo => {
 				this.dispatchEditTodo(updatedTodo);
